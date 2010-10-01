@@ -32,7 +32,26 @@ class Dataset(tablib.Dataset):
             attrs.append(attr)
         return attrs
 
-    def append(self, django_object):
-        new_row = self._getattrs(django_object)
-        super(Dataset, self).append(row=new_row)
+    def append(self, *args, **kwargs):
+        # Thanks to my previous decision to simply not support columns, this
+        # dumb conditional is necessary to preserve backwards compatibility.
+        if len(args) == 1:
+            # if using old syntax, just set django_object to args[0] and
+            # col to None
+            django_object = args[0]
+            col = None
+        else:
+            # otherwise assume both row and col may have been passed and
+            # handle appropriately
+            django_object = kwargs.get('row', None)
+            col = kwargs.get('row', None)
+
+        # make sure that both row and col are in a format that can be passed
+        # straight to tablib
+        if django_object is not None:
+            row = self._getattrs(django_object)
+        else:
+            row = django_object
+
+        super(Dataset, self).append(row=row, col=col)
 
