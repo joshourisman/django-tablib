@@ -31,4 +31,8 @@ class Dataset(tablib.Dataset):
             attr = self._cleanval(getattr(obj, attr), attr)
             attrs.append(attr)
         return attrs
-        
+
+    def append(self, django_object):
+        new_row = self._getattrs(django_object)
+        super(Dataset, self).append(row=new_row)
+
