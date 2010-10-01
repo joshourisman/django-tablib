@@ -44,7 +44,7 @@ class Dataset(tablib.Dataset):
             # otherwise assume both row and col may have been passed and
             # handle appropriately
             django_object = kwargs.get('row', None)
-            col = kwargs.get('row', None)
+            col = kwargs.get('col', None)
 
         # make sure that both row and col are in a format that can be passed
         # straight to tablib
