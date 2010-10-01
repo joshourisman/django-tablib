@@ -24,9 +24,13 @@ Create a tablib Dataset from a Django QuerySet with a custom list of headers: ::
     headers = ['id', 'myfield1', 'myfield2']
     data = django_tablib.Dataset(MyModel.objects.all(), headers=headers)
 
-Add a new row (adding of columns is not supported): ::
+Add a new row: ::
 
     >>> data.append(MyModel(**values)
+
+Add a new column: ::
+
+    >>> data.append(col=['header', 'value1', 'value2' ... 'valuen'])
 
 Delete a row: ::
 
