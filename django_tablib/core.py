@@ -9,9 +9,13 @@ class Dataset(tablib.Dataset):
         if headers is None:
             fields = queryset.model._meta.fields
             self.attr_list = [field.name for field in fields]
-        else:
-            self.attr_list = headers
+        elif type(headers) is dict:
+            self.header_dict = headers
+            self.header_list = self.header_dict.keys()
+            self.attr_list = self.header_dict.values()
+        elif type(headers) is list:
             self.header_list = headers
+            self.attr_list = headers
         data = map(self._getattrs, queryset)
         super(Dataset, self).__init__(headers=self.header_list, *data)
 
