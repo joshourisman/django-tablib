@@ -1,1 +1,1 @@
-from core import Dataset
+from core import ModelDataset

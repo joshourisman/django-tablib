@@ -5,7 +5,7 @@ django-tablib is a helper library for Django that allows Django models to be use
 
 Overview
 --------
-`django_tablib.Dataset()`
+`django_tablib.ModelDataset()`
     A wrapper around tablib.Dataset that handles the conversion of Django QuerySets to a format that tablib can work with.
 
 Usage
@@ -13,10 +13,10 @@ Usage
 
 Create a tablib Dataset from a Django model, automatically introspecting all fields from the model: ::
 
-    from django_tablib import Dataset
+    from django_tablib import ModelDataset
     from myapp.models import MyModel
 
-    class MyModelDataset(Dataset):
+    class MyModelDataset(ModelDataset):
         class Meta:
 	    model = MyModel
 
@@ -24,10 +24,10 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
 Create a tablib Dataset from a Django model with a custom list of headers: ::
 
-    from django_tablib import Dataset
+    from django_tablib import ModelDataset
     from myapp.models import MyModel
 
-    class MyModelDataset(Dataset):
+    class MyModelDataset(ModelDataset):
         class Meta:
 	    model = MyModel
 	    headers = [
@@ -40,10 +40,10 @@ Create a tablib Dataset from a Django model with a custom list of headers: ::
 
 Create a tablib Dataset from a Django QuerySet: ::
 
-    from django_tablib import Dataset
+    from django_tablib import ModelDataset
     from myapp.models import MyModel
 
-    class MyModelDataset(Dataset):
+    class MyModelDataset(ModelDataset):
         class Meta:
 	    queryset = MyModel.objects.filter(is_awesome=True)
 
@@ -51,10 +51,10 @@ Create a tablib Dataset from a Django QuerySet: ::
 
 Create a tablib Dataset from a Django model with a dictionary mapping custom headers to attributes of your Django objects: ::
 
-    from django_tablib import Dataset
+    from django_tablib import ModelDataset
     from myapp.models import MyModel
 
-    class MyModelDataset(Dataset):
+    class MyModelDataset(ModelDataset):
         class Meta:
 	    model = MyModel
 	    headers = {

@@ -100,5 +100,5 @@ class BaseDataset(tablib.Dataset):
 
         super(BaseDataset, self).append(row=row, col=col)
 
-class Dataset(BaseDataset):
+class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
