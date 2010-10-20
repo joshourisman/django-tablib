@@ -65,7 +65,7 @@ Create a tablib Dataset from a Django model with a dictionary mapping custom hea
 
 Add a new row: ::
 
-    >>> data.append(MyModel(**values)
+    >>> data.append(MyModel(**values))
 
 Add a new column: ::
 
