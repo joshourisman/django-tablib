@@ -29,11 +29,15 @@ class DatasetMetaclass(type):
             raise Exception("You must set a model or queryset for each Dataset "
                             "subclass")
         if opts.queryset:
-            new_class.queryset = opts.queryset
-            new_class.model = opts.queryset.model
+            queryset = opts.queryset
+            model = queryset.model
+            new_class.queryset = queryset
+            new_class.model = model
         else:
-            new_class.model = opts.model
-            new_class.queryset = opts.model.objects.all()
+            model = opts.model
+            queryset = model.objects.all
+            new_class.model = model
+            new_class.queryset = queryset
         if opts.headers:
             headers = opts.headers
             if type(headers) is dict:
