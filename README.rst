@@ -34,7 +34,7 @@ Create a tablib Dataset from a Django QuerySet with a dictionary mapping custom 
 
 Add a new row: ::
 
-    >>> data.append(MyModel(**values)
+    >>> data.append(MyModel(**values))
 
 Add a new column: ::
 
