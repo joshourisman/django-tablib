@@ -37,3 +37,12 @@ Delete a row: ::
     >>> del data[1]
 
 For everything else see the tablib documentation!
+
+Django Integration
+------------------
+
+django_tablib now provides a generic Django view to automatically export your querysets to an Excel spreadsheet. In your urls.py: ::
+
+    (r'^export/$', 'django_tablib.views.export', {
+        'model': MyModel,
+	})
