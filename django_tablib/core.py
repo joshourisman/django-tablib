@@ -23,11 +23,15 @@ class DatasetMetaclass(type):
         opts = new_class._meta = DatasetOptions(getattr(new_class,
                                                         'Meta', None))
 
-        if not opts.model:
-            raise Exception("You must set a model for each Dataset "
+        if not opts.model and not opts.queryset:
+            raise Exception("You must set a model or queryset for each Dataset "
                             "subclass")
-        model = opts.model
-        new_class.model = model
+        if opts.queryset:
+            new_class.queryset = opts.queryset
+            new_class.model = opts.queryset.model
+        else:
+            new_class.model = opts.model
+            new_class.queryset = opts.model.objects.all()
         if opts.headers:
             headers = opts.headers
             if type(headers) is dict:
@@ -45,9 +49,8 @@ class DatasetMetaclass(type):
         return new_class
 
 class BaseDataset(tablib.Dataset):
-    def __init__(self, **kwargs):
-        queryset = self.model.objects.filter(**kwargs)
-        data = map(self._getattrs, queryset)
+    def __init__(self):
+        data = map(self._getattrs, self.queryset)
         super(BaseDataset, self).__init__(headers=self.header_list, *data)
 
     def _cleanval(self, value, attr):
