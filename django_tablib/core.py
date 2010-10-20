@@ -35,7 +35,7 @@ class DatasetMetaclass(type):
             new_class.model = model
         else:
             model = opts.model
-            queryset = model.objects.all
+            queryset = model.objects.all()
             new_class.model = model
             new_class.queryset = queryset
         if opts.headers:
