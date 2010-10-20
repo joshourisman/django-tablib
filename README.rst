@@ -24,6 +24,14 @@ Create a tablib Dataset from a Django QuerySet with a custom list of headers: ::
     headers = ['id', 'myfield1', 'myfield2']
     data = django_tablib.Dataset(MyModel.objects.all(), headers=headers)
 
+Create a tablib Dataset from a Django QuerySet with a dictionary mapping custom headers to attributes of your Django objects: ::
+
+    from myapp.models import MyModel
+
+    data = django_tablib.Dataset(MyModel.objects.all(), headers = {
+        'Awesome Descriptive Column Header': 'boring_field_name',
+	})
+
 Add a new row: ::
 
     >>> data.append(MyModel(**values)
