@@ -7,6 +7,8 @@ from django.utils.encoding import smart_unicode
 class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
+        self.queryset = getattr(options, 'queryset', None)
+        self.headers = getattr(options, 'headers', None)
 
 class DatasetMetaclass(type):
     def __new__(cls, name, bases, attrs):
