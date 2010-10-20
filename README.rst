@@ -11,26 +11,57 @@ Overview
 Usage
 -----
 
-Create a tablib Dataset from a Django QuerySet, automatically introspecting all fields from the model: ::
+Create a tablib Dataset from a Django model, automatically introspecting all fields from the model: ::
 
+    from django_tablib import Datset
     from myapp.models import MyModel
 
-    data = django_tablib.Dataset(MyModel.objects.all())
+    class MyModelDataset(Dataset):
+        class Meta:
+	    model = MyModel
 
-Create a tablib Dataset from a Django QuerySet with a custom list of headers: ::
+    data = MyModelDataset()
 
+Create a tablib Dataset from a Django model with a custom list of headers: ::
+
+    from django_tablib import Datset
     from myapp.models import MyModel
 
-    headers = ['id', 'myfield1', 'myfield2']
-    data = django_tablib.Dataset(MyModel.objects.all(), headers=headers)
+    class MyModelDataset(Dataset):
+        class Meta:
+	    model = MyModel
+	    headers = [
+	        'id',
+		'myfield1',
+		'myfield2',
+	    ]
 
-Create a tablib Dataset from a Django QuerySet with a dictionary mapping custom headers to attributes of your Django objects: ::
+    data = MyModelDataset()
 
+Create a tablib Dataset from a Django QuerySet: ::
+
+    from django_tablib import Datset
     from myapp.models import MyModel
 
-    data = django_tablib.Dataset(MyModel.objects.all(), headers = {
-        'Awesome Descriptive Column Header': 'boring_field_name',
-	})
+    class MyModelDataset(Dataset):
+        class Meta:
+	    queryset = MyModel.objects.filter(is_awesome=True)
+
+    data = MyModelDataset()
+
+Create a tablib Dataset from a Django model with a dictionary mapping custom headers to attributes of your Django objects: ::
+
+    from django_tablib import Datset
+    from myapp.models import MyModel
+
+    class MyModelDataset(Dataset):
+        class Meta:
+	    model = MyModel
+	    headers = {
+	        'Awesome Descriptive Column Header': 'boring_field_name',
+	    }
+
+    data = MyModelDataset()
 
 Add a new row: ::
 
