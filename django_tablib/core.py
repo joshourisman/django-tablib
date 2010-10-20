@@ -4,21 +4,51 @@ import tablib
 from django.template.defaultfilters import date
 from django.utils.encoding import smart_unicode
 
-class Dataset(tablib.Dataset):
-    def __init__(self, queryset, headers=None):
-        if headers is None:
-            fields = queryset.model._meta.fields
-            self.header_list = [field.name for field in fields]
-            self.attr_list = self.header_list
-        elif type(headers) is dict:
-            self.header_dict = headers
-            self.header_list = self.header_dict.keys()
-            self.attr_list = self.header_dict.values()
-        elif type(headers) is list:
-            self.header_list = headers
-            self.attr_list = headers
+class DatasetOptions(object):
+    def __init__(self, options=None):
+        self.model = getattr(options, 'model', None)
+
+class DatasetMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        try:
+            parents = [b for b in bases if issubclass(b, Dataset)]
+        except NameError:
+            parents = None
+        new_class = super(DatasetMetaclass, cls).__new__(cls, name,
+                                                         bases, attrs)
+
+        if not parents:
+            return new_class
+
+        opts = new_class._meta = DatasetOptions(getattr(new_class,
+                                                        'Meta', None))
+
+        if not opts.model:
+            raise Exception("You must set a model for each Dataset "
+                            "subclass")
+        model = opts.model
+        new_class.model = model
+        if opts.headers:
+            headers = opts.headers
+            if type(headers) is dict:
+                new_class.header_dict = headers
+                new_class.header_list = headers.keys()
+                new_class.attr_list = headers.values()
+            elif type(headers) is list:
+                new_class.header_list = headers
+                new_class.attr_list = headers
+        else:
+            fields = [field.name for field in model._meta.fields]
+            new_class.header_list = fields
+            new_class.attr_list = fields
+        
+        return new_class
+
+class BaseDataset(tablib.Dataset):
+    def __init__(self, **kwargs):
+        queryset = self.model.objects.filter(**kwargs)
         data = map(self._getattrs, queryset)
-        super(Dataset, self).__init__(headers=self.header_list, *data)
+        super(BaseDataset, self).__init__(headers=self.header_list, *data)
 
     def _cleanval(self, value, attr):
         if callable(value):
@@ -59,5 +89,7 @@ class Dataset(tablib.Dataset):
         else:
             row = django_object
 
-        super(Dataset, self).append(row=row, col=col)
+        super(BaseDataset, self).append(row=row, col=col)
 
+class Dataset(BaseDataset):
+    __metaclass__ = DatasetMetaclass
