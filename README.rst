@@ -13,7 +13,7 @@ Usage
 
 Create a tablib Dataset from a Django model, automatically introspecting all fields from the model: ::
 
-    from django_tablib import Datset
+    from django_tablib import Dataset
     from myapp.models import MyModel
 
     class MyModelDataset(Dataset):
@@ -24,7 +24,7 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
 Create a tablib Dataset from a Django model with a custom list of headers: ::
 
-    from django_tablib import Datset
+    from django_tablib import Dataset
     from myapp.models import MyModel
 
     class MyModelDataset(Dataset):
@@ -40,7 +40,7 @@ Create a tablib Dataset from a Django model with a custom list of headers: ::
 
 Create a tablib Dataset from a Django QuerySet: ::
 
-    from django_tablib import Datset
+    from django_tablib import Dataset
     from myapp.models import MyModel
 
     class MyModelDataset(Dataset):
@@ -51,7 +51,7 @@ Create a tablib Dataset from a Django QuerySet: ::
 
 Create a tablib Dataset from a Django model with a dictionary mapping custom headers to attributes of your Django objects: ::
 
-    from django_tablib import Datset
+    from django_tablib import Dataset
     from myapp.models import MyModel
 
     class MyModelDataset(Dataset):
