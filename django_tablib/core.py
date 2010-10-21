@@ -13,12 +13,11 @@ class DatasetOptions(object):
 class DatasetMetaclass(type):
     def __new__(cls, name, bases, attrs):
         try:
-            parents = [b for b in bases if issubclass(b, Dataset)]
+            parents = [b for b in bases if issubclass(b, ModelDataset)]
         except NameError:
             parents = None
         new_class = super(DatasetMetaclass, cls).__new__(cls, name,
                                                          bases, attrs)
-
         if not parents:
             return new_class
 
