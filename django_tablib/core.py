@@ -42,7 +42,7 @@ class DatasetMetaclass(type):
             fields = opts.fields
         else:
             fields = [field.name for field in model._meta.fields]
-        new_class.fields = fields
+        new_class.attr_list = fields
         if opts.headers:
             header_dict = opts.headers
             # Thanks @zacharyvoase!
