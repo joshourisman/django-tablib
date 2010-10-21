@@ -22,7 +22,7 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model with a custom list of headers: ::
+Create a tablib Dataset from a Django model with a custom list of fields: ::
 
     from django_tablib import ModelDataset
     from myapp.models import MyModel
@@ -30,7 +30,7 @@ Create a tablib Dataset from a Django model with a custom list of headers: ::
     class MyModelDataset(ModelDataset):
         class Meta:
 	    model = MyModel
-	    headers = [
+	    fields = [
 	        'id',
 		'myfield1',
 		'myfield2',
@@ -57,8 +57,13 @@ Create a tablib Dataset from a Django model with a dictionary mapping custom hea
     class MyModelDataset(ModelDataset):
         class Meta:
 	    model = MyModel
+	    fields = [
+                'boring_field_name',
+		'id',
+		'some_other_field',
+	    ]
 	    headers = {
-	        'Awesome Descriptive Column Header': 'boring_field_name',
+	        'boring_field_name': 'Awesome Descriptive Column Header',
 	    }
 
     data = MyModelDataset()
@@ -76,12 +81,3 @@ Delete a row: ::
     >>> del data[1]
 
 For everything else see the tablib documentation!
-
-Django Integration
-------------------
-
-django_tablib now provides a generic Django view to automatically export your querysets to an Excel spreadsheet. In your urls.py: ::
-
-    (r'^export/$', 'django_tablib.views.export', {
-        'model': MyModel,
-	})
