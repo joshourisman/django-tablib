@@ -8,6 +8,7 @@ class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
+        self.fields = getattr(options, 'fields', None)
         self.headers = getattr(options, 'headers', None)
 
 class DatasetMetaclass(type):
@@ -37,19 +38,20 @@ class DatasetMetaclass(type):
             queryset = model.objects.all()
             new_class.model = model
             new_class.queryset = queryset
-        if opts.headers:
-            headers = opts.headers
-            if type(headers) is dict:
-                new_class.header_dict = headers
-                new_class.header_list = headers.keys()
-                new_class.attr_list = headers.values()
-            elif type(headers) is list:
-                new_class.header_list = headers
-                new_class.attr_list = headers
+        if opts.fields:
+            fields = opts.fields
         else:
             fields = [field.name for field in model._meta.fields]
-            new_class.header_list = fields
-            new_class.attr_list = fields
+        new_class.fields = fields
+        if opts.headers:
+            header_dict = opts.headers
+            # Thanks @zacharyvoase!
+            header_list = [opts.headers.get(field, field) for field in fields]
+        else:
+            header_dict = None
+            header_list = fields
+        new_class.header_dict = header_dict
+        new_class.header_list = header_list
         
         return new_class
 
