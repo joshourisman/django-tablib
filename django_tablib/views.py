@@ -1,6 +1,8 @@
+from __future__ import absolute_import
+
 from django.http import HttpResponse
 
-from core import Dataset
+from .core import Dataset
 
 def export(request, queryset=None, model=None, headers=None):
     if queryset is None:

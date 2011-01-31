@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+
 import datetime
 import tablib
 
 from django.template.defaultfilters import date
 from django.utils.encoding import smart_unicode
+
 
 class Dataset(tablib.Dataset):
     def __init__(self, queryset, headers=None):
