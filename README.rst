@@ -81,3 +81,32 @@ Delete a row: ::
     >>> del data[1]
 
 For everything else see the tablib documentation!
+
+Django Integration
+------------------
+
+django_tablib now provides a generic Django view to automatically export your
+querysets to an Excel spreadsheet. In your urls.py::
+
+    (r'^export/$', 'django_tablib.views.export', {
+        'model': MyModel,
+    })
+
+If you have many models to export you may prefer use the generic export view:
+
+#. Add the view to ``urlpatterns`` in ``urls.py``::
+
+    url(r'export/(?P<model_name>[^/]+)/$', "django_tablib.views.generic_export"),
+
+#. Create the ``settings.TABLIB_MODELS`` dictionary using lower-case model
+   names in "app.model" format as keys and the permitted `field lookups
+   <http://docs.djangoproject.com/en/dev/ref/models/querysets/#field-lookups>`_
+   or ``None`` as values::
+
+       TABLIB_MODELS = {
+           'myapp.simple': None,
+           'myapp.related': {'simple__title': ('exact', 'iexact')},
+       }
+
+#. Open ``/export/myapp.simple`` or
+   ``/export/myapp.related/?simple__title__iexact=test``
