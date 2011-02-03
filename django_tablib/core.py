@@ -26,8 +26,8 @@ class DatasetMetaclass(type):
                                                         'Meta', None))
 
         if not opts.model and not opts.queryset:
-            raise Exception("You must set a model or queryset for each Dataset "
-                            "subclass")
+            raise Exception("You must set a model or queryset for each "
+                            "Dataset subclass")
         if opts.queryset:
             queryset = opts.queryset
             model = queryset.model
