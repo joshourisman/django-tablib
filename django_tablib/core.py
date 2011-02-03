@@ -6,6 +6,9 @@ import tablib
 from django.template.defaultfilters import date
 from django.utils.encoding import smart_unicode
 
+class NoObjectsException(Exception):
+    pass
+
 class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
@@ -26,8 +29,8 @@ class DatasetMetaclass(type):
                                                         'Meta', None))
 
         if not opts.model and not opts.queryset:
-            raise Exception("You must set a model or queryset for each "
-                            "Dataset subclass")
+            raise NoObjectsException("You must set a model or non-empty "
+                                     "queryset for each Dataset subclass")
         if opts.queryset:
             queryset = opts.queryset
             model = queryset.model
