@@ -10,8 +10,6 @@ class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
-        self.fields = getattr(options, 'fields', None)
-        self.headers = getattr(options, 'headers', None)
 
 class DatasetMetaclass(type):
     def __new__(cls, name, bases, attrs):
@@ -40,20 +38,6 @@ class DatasetMetaclass(type):
             queryset = model.objects.all()
             new_class.model = model
             new_class.queryset = queryset
-        if opts.fields:
-            fields = opts.fields
-        else:
-            fields = [field.name for field in model._meta.fields]
-        new_class.attr_list = fields
-        if opts.headers:
-            header_dict = opts.headers
-            # Thanks @zacharyvoase!
-            header_list = [opts.headers.get(field, field) for field in fields]
-        else:
-            header_dict = None
-            header_list = fields
-        new_class.header_dict = header_dict
-        new_class.header_list = header_list
         
         return new_class
 
@@ -105,3 +89,20 @@ class BaseDataset(tablib.Dataset):
 
 class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
+
+    def __init__(self, *args, **kwargs):
+        if self.fields:
+            fields = self.fields
+        else:
+            fields = [field.name for field in model._meta.fields]
+        self.attr_list = fields
+        if self.headers:
+            header_dict = self.headers
+            header_list = [self.headers.get(field, field) for field in fields]
+        else:
+            header_dict = None
+            header_list = fields
+        self.header_dict = header_dict
+        self.header_list = header_list
+        super(ModelDataset, self).__init__(*args, **kwargs)
+        
