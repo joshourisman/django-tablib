@@ -124,3 +124,5 @@ querysets to an Excel spreadsheet. In your urls.py::
         pass
 
     admin.site.register(MyModel, MyModelAdmin)
+
+That's it!
