@@ -5,7 +5,7 @@ from distutils.core import setup
 
 description = "A wrapper around Kenneth Reitz' tablib to work with Django models."
 
-VERSION = '2.0'
+VERSION = '2.1'
 
 setup(
     name='django-tablib',
