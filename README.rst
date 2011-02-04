@@ -6,7 +6,7 @@ django-tablib is a helper library for Django that allows Django models to be use
 Overview
 --------
 `django_tablib.ModelDataset()`
-    A wrapper around tablib.Dataset that handles the conversion of Django QuerySets to a format that tablib can work with.
+    A wrapper around tablib.Dataset that handles the conversion of Django QuerySets to a format that tablib can work with in the model of Django's ModelForm and ModelAdmin.
 
 Usage
 -----
@@ -28,13 +28,13 @@ Create a tablib Dataset from a Django model with a custom list of fields: ::
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
+        fields = [
+            'id',
+            'myfield1',
+            'myfield2',
+        ]
         class Meta:
 	    model = MyModel
-	    fields = [
-	        'id',
-		'myfield1',
-		'myfield2',
-	    ]
 
     data = MyModelDataset()
 
@@ -55,16 +55,16 @@ Create a tablib Dataset from a Django model with a dictionary mapping custom hea
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
+        fields = [
+            'boring_field_name',
+            'id',
+            'some_other_field',
+        ]
+        headers = {
+            'boring_field_name': 'Awesome Descriptive Column Header',
+        }
         class Meta:
 	    model = MyModel
-	    fields = [
-                'boring_field_name',
-		'id',
-		'some_other_field',
-	    ]
-	    headers = {
-	        'boring_field_name': 'Awesome Descriptive Column Header',
-	    }
 
     data = MyModelDataset()
 
