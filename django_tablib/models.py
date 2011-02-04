@@ -93,13 +93,16 @@ class BaseDataset(tablib.Dataset):
 class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
 
+    fields = None
+    headers = None
+
     def __init__(self, *args, **kwargs):
-        if self.fields:
+        if self.fields is not None:
             fields = self.fields
         else:
-            fields = [field.name for field in model._meta.fields]
+            fields = [field.name for field in self.model._meta.fields]
         self.attr_list = fields
-        if self.headers:
+        if self.headers is not None:
             header_dict = self.headers
             header_list = [self.headers.get(field, field) for field in fields]
         else:
