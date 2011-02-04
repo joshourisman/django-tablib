@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
+from django.core.urlresolvers import reverse
 from django.utils.functional import update_wrapper
 from django_tablib.views import export
 
@@ -44,8 +45,9 @@ class TablibAdmin(admin.ModelAdmin):
         return cl.get_query_set()
         
     def changelist_view(self, request, extra_context=None):
+        info = self.model._meta.app_label, self.model._meta.module_name
         extra_context = {
-            'tablib_export_url': self.tablib_export_url,
+            'tablib_export_url': reverse('admin:%s_%s_tablib_export' % info),
             'request': request,
         }
         return super(TablibAdmin, self).changelist_view(request, extra_context)
