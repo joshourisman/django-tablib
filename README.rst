@@ -86,12 +86,11 @@ Django Integration
 ------------------
 
 `django_tablib.views.export`
-    django_tablib provides a generic Django view to automatically export your
-querysets to an Excel spreadsheet. In your urls.py::
+    django_tablib provides a generic Django view to automatically export your querysets to an Excel spreadsheet. In your urls.py::
 
-    (r'^export/$', 'django_tablib.views.export', {
-        'model': MyModel,
-    })
+        (r'^export/$', 'django_tablib.views.export', {
+            'model': MyModel,
+        })
 
 `django_tablib.views.generic_export`
     If you have many models to export you may prefer use the generic export view:
@@ -116,13 +115,13 @@ querysets to an Excel spreadsheet. In your urls.py::
 `django_tablib.admin.TablibAdmin`
     For easy exporting of your models directly from the Django admin, django_tablib now provides a ModelAdmin subclass giving you a button to export to Excel straight from the change list::
 
-    from django.contrib import admin
-    from django_tablib.admin import TablibAdmin
-    from myapp.models import MyModel
-
-    class MyModelAdmin(TablibAdmin):
-        pass
-
-    admin.site.register(MyModel, MyModelAdmin)
+        from django.contrib import admin
+        from django_tablib.admin import TablibAdmin
+        from myapp.models import MyModel
+    
+        class MyModelAdmin(TablibAdmin):
+            pass
+    
+        admin.site.register(MyModel, MyModelAdmin)
 
 That's it!
