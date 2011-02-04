@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .base import BaseDataset
 
-class Dataset(BaseDataset):
+class SimpleDataset(BaseDataset):
     def __init__(self, queryset, headers=None):
         self.queryset = queryset
         if headers is None:
@@ -16,5 +16,5 @@ class Dataset(BaseDataset):
         elif type(headers) is list:
             self.header_list = headers
             self.attr_list = headers
-        super(Dataset, self).__init__()
+        super(SimpleDataset, self).__init__()
         

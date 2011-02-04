@@ -5,14 +5,14 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.db.models.loading import get_model
 
-from .datasets import Dataset
+from .datasets import SimpleDataset
 
 
 def export(request, queryset=None, model=None, headers=None):
     if queryset is None:
         queryset = model.objects.all()
 
-    dataset = Dataset(queryset, headers=headers)
+    dataset = SimpleDataset(queryset, headers=headers)
     filename = 'export.xls'
     response = HttpResponse(dataset.xls, mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
