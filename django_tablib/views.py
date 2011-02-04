@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.db.models.loading import get_model
 
-from .core import Dataset
+from .datasets import Dataset
 
 
 def export(request, queryset=None, model=None, headers=None):
@@ -74,3 +74,4 @@ def generic_export(request, model_name=None):
         qs = qs.filter(**filters)
 
     return export(request, model=model, queryset=qs)
+
