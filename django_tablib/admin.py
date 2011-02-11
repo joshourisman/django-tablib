@@ -6,10 +6,23 @@ from django.http import Http404
 from django.utils.functional import update_wrapper
 from django_tablib.views import export
 
+from .base import mimetype_map
+
 class TablibAdmin(admin.ModelAdmin):
     change_list_template = 'tablib/change_list.html'
     formats = []
     export_filename = 'export'
+
+    def __init__(self, *args, **kwargs):
+        for format in self.formats:
+            if format not in mimetype_map:
+                msg = "%s is not a valid export format, please choose" \
+                    " from the following options: %s" % (
+                    format,
+                    ', '.join(mimetype_map.keys()),
+                    )
+                raise Exception(msg)
+        super(TablibAdmin, self).__init__(*args, **kwargs)
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -59,3 +72,4 @@ class TablibAdmin(admin.ModelAdmin):
             urls.append((format, reverse('admin:%s_%s_tablib_export' % info, kwargs={'format': format}),))
         extra_context['urls'] = urls
         return super(TablibAdmin, self).changelist_view(request, extra_context)
+
