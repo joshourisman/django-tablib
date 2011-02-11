@@ -5,11 +5,11 @@ from django.template.defaultfilters import date
 from django.utils.encoding import smart_unicode
 
 mimetype_map = {
-	'xls': 'application/vnd.ms-excel',
-	'csv': 'text/csv',
-	'html': 'text/html',
+    'xls': 'application/vnd.ms-excel',
+    'csv': 'text/csv',
+    'html': 'text/html',
     'yaml': 'text/yaml',
-}
+    }
 
 class BaseDataset(tablib.Dataset):
     def __init__(self):

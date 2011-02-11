@@ -9,7 +9,8 @@ from .base import mimetype_map
 from .datasets import SimpleDataset
 
 
-def export(request, queryset=None, model=None, headers=None, format='xls', filename='export'):
+def export(request, queryset=None, model=None, headers=None, format='xls',
+           filename='export'):
     if queryset is None:
         queryset = model.objects.all()
 
@@ -17,7 +18,10 @@ def export(request, queryset=None, model=None, headers=None, format='xls', filen
     filename = '%s.%s' % (filename, format)
     if not hasattr(dataset, format):
         raise Http404
-    response = HttpResponse(getattr(dataset, format), mimetype=mimetype_map.get(format, 'application/octet-stream'))
+    response = HttpResponse(
+        getattr(dataset, format),
+        mimetype=mimetype_map.get(format, 'application/octet-stream')
+        )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
@@ -66,7 +70,9 @@ def generic_export(request, model_name=None):
         allowed_lookups = filter_settings.get(rel, None)
 
         if allowed_lookups is None:
-            return HttpResponseBadRequest("Filtering on %s is not allowed" % rel)
+            return HttpResponseBadRequest(
+                "Filtering on %s is not allowed" % rel
+                )
         elif lookup_type not in allowed_lookups:
             return HttpResponseBadRequest("%s may only be filtered using %s"
                                             % (k, " ".join(allowed_lookups)))
