@@ -1,5 +1,4 @@
 include AUTHORS
 include LICENSE
 include README.rst
-recursive-include django_tablib *.py
-recursive-include django_tablib/templates *.html
+recursive-include django_tablib/templates *
