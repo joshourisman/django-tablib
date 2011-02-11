@@ -15,7 +15,9 @@ def export(request, queryset=None, model=None, headers=None, format='xls'):
 
     dataset = SimpleDataset(queryset, headers=headers)
     filename = 'export.%s' % format
-    response = HttpResponse(getattr(dataset, format), mimetype=mimetype_map[format])
+    if not hasattr(dataset, format):
+        raise Http404
+    response = HttpResponse(getattr(dataset, format), mimetype=mimetype_map.get(format, 'application/octet-stream'))
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
