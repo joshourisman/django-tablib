@@ -3,14 +3,16 @@
 {% load i18n %}
 
 {% block object-tools %}
-    <ul class="object-tools">
-    <li><a href="{{ tablib_export_url }}?{% for k,v in request.GET.items %}{{k}}={{v}}{% if not forloop.last %}&{% endif %}{% endfor %}" class="addlink">{% trans "Export to Excel" %}</a></li>
-  {% if has_add_permission %}
+  <ul class="object-tools">
+    {% for url in urls %}
+      <li><a href="{{ url.1 }}?{% for k,v in request.GET.items %}{{k}}={{v}}{% if not forloop.last %}&{% endif %}{% endfor %}" class="addlink">{% blocktrans with url.0|upper as format %}Export to {{ format }} {% endblocktrans %}</a></li>
+    {% endfor %}
+    {% if has_add_permission %}
       <li>
         <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
           {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
         </a>
       </li>
-  {% endif %}
-    </ul>
+    {% endif %}
+  </ul>
 {% endblock %}

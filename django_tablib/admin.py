@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.utils.functional import update_wrapper
 from django_tablib.views import export
 
 class TablibAdmin(admin.ModelAdmin):
     change_list_template = 'tablib/change_list.html'
+    formats = []
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -18,16 +20,18 @@ class TablibAdmin(admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.module_name
         
         urlpatterns = patterns('',
-            url(r'^tablib-export/$',
+            url(r'^tablib-export/(?P<format>\w+)/$',
                 wrap(self.tablib_export),
                 name='%s_%s_tablib_export' % info),
         )
         urlpatterns += super(TablibAdmin, self).get_urls()
         return urlpatterns
     
-    def tablib_export(self, request):
+    def tablib_export(self, request, format):
+        if format not in self.formats:
+            raise Http404
         queryset = self.get_tablib_queryset(request)
-        return export(request, queryset=queryset, model=self.model)
+        return export(request, queryset=queryset, model=self.model, format=format)
     
     def get_tablib_queryset(self, request):
         cl = ChangeList(request,
@@ -46,8 +50,9 @@ class TablibAdmin(admin.ModelAdmin):
         
     def changelist_view(self, request, extra_context=None):
         info = self.model._meta.app_label, self.model._meta.module_name
-        extra_context = {
-            'tablib_export_url': reverse('admin:%s_%s_tablib_export' % info),
-            'request': request,
-        }
+        extra_context = {'request': request}
+        urls = []
+        for format in self.formats:
+            urls.append((format, reverse('admin:%s_%s_tablib_export' % info, kwargs={'format': format}),))
+        extra_context['urls'] = urls
         return super(TablibAdmin, self).changelist_view(request, extra_context)
