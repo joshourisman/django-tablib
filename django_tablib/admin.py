@@ -21,7 +21,7 @@ class TablibAdmin(admin.ModelAdmin):
                     format,
                     ', '.join(mimetype_map.keys()),
                     )
-                raise Exception(msg)
+                raise ValueError(msg)
         super(TablibAdmin, self).__init__(*args, **kwargs)
     
     def get_urls(self):
