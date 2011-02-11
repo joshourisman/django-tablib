@@ -9,6 +9,7 @@ mimetype_map = {
     'csv': 'text/csv',
     'html': 'text/html',
     'yaml': 'text/yaml',
+    'json': 'application/json',
     }
 
 class BaseDataset(tablib.Dataset):
