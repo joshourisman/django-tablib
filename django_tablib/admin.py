@@ -1,3 +1,4 @@
+import datetime
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
@@ -8,6 +9,7 @@ from django_tablib.views import export
 class TablibAdmin(admin.ModelAdmin):
     change_list_template = 'tablib/change_list.html'
     formats = []
+    export_filename = 'export'
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -31,7 +33,8 @@ class TablibAdmin(admin.ModelAdmin):
         if format not in self.formats:
             raise Http404
         queryset = self.get_tablib_queryset(request)
-        return export(request, queryset=queryset, model=self.model, format=format)
+        filename = datetime.datetime.now().strftime(self.export_filename)
+        return export(request, queryset=queryset, model=self.model, format=format, filename=filename)
     
     def get_tablib_queryset(self, request):
         cl = ChangeList(request,

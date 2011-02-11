@@ -9,12 +9,12 @@ from .base import mimetype_map
 from .datasets import SimpleDataset
 
 
-def export(request, queryset=None, model=None, headers=None, format='xls'):
+def export(request, queryset=None, model=None, headers=None, format='xls', filename='export'):
     if queryset is None:
         queryset = model.objects.all()
 
     dataset = SimpleDataset(queryset, headers=headers)
-    filename = 'export.%s' % format
+    filename = '%s.%s' % (filename, format)
     if not hasattr(dataset, format):
         raise Http404
     response = HttpResponse(getattr(dataset, format), mimetype=mimetype_map.get(format, 'application/octet-stream'))
