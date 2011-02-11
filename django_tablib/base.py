@@ -18,7 +18,7 @@ class BaseDataset(tablib.Dataset):
         elif t in [datetime.date, datetime.datetime]:
             return date(value, 'SHORT_DATE_FORMAT')
         else:
-            return smart_unicode(value).encode('ascii', 'xmlcharrefreplace')
+            return smart_unicode(value).encode('utf8')
     
     def _getattrs(self, obj):
         attrs = []
