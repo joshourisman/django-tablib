@@ -120,7 +120,7 @@ Django Integration
         from myapp.models import MyModel
     
         class MyModelAdmin(TablibAdmin):
-            pass
+            formats = ['xls', 'json', 'yaml', 'csv', 'html',]
     
         admin.site.register(MyModel, MyModelAdmin)
 
