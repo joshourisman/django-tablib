@@ -23,7 +23,7 @@ class TablibAdmin(admin.ModelAdmin):
                     )
                 raise ValueError(msg)
         super(TablibAdmin, self).__init__(*args, **kwargs)
-    
+
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
 
@@ -33,7 +33,7 @@ class TablibAdmin(admin.ModelAdmin):
             return update_wrapper(wrapper, view)
 
         info = self.model._meta.app_label, self.model._meta.module_name
-        
+
         urlpatterns = patterns('',
             url(r'^tablib-export/(?P<format>\w+)/$',
                 wrap(self.tablib_export),
@@ -41,14 +41,14 @@ class TablibAdmin(admin.ModelAdmin):
         )
         urlpatterns += super(TablibAdmin, self).get_urls()
         return urlpatterns
-    
+
     def tablib_export(self, request, format):
         if format not in self.formats:
             raise Http404
         queryset = self.get_tablib_queryset(request)
         filename = datetime.datetime.now().strftime(self.export_filename)
         return export(request, queryset=queryset, model=self.model, format=format, filename=filename)
-    
+
     def get_tablib_queryset(self, request):
         cl = ChangeList(request,
             self.model,
@@ -63,13 +63,15 @@ class TablibAdmin(admin.ModelAdmin):
             self,
         )
         return cl.get_query_set()
-        
+
     def changelist_view(self, request, extra_context=None):
         info = self.model._meta.app_label, self.model._meta.module_name
-        extra_context = {'request': request}
+        context = {'request': request}
         urls = []
         for format in self.formats:
             urls.append((format, reverse('admin:%s_%s_tablib_export' % info, kwargs={'format': format}),))
-        extra_context['urls'] = urls
-        return super(TablibAdmin, self).changelist_view(request, extra_context)
+        context['urls'] = urls
+        context.update(extra_context or {})
+
+        return super(TablibAdmin, self).changelist_view(request, context)
 
