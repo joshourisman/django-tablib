@@ -9,11 +9,11 @@ class SimpleDataset(BaseDataset):
             fields = queryset.model._meta.fields
             self.header_list = [field.name for field in fields]
             self.attr_list = self.header_list
-        elif type(headers) is dict:
+        elif isinstance(headers, dict):
             self.header_dict = headers
             self.header_list = self.header_dict.keys()
             self.attr_list = self.header_dict.values()
-        elif type(headers) is list:
+        elif isinstance(headers, (tuple, list)):
             self.header_list = headers
             self.attr_list = headers
         super(SimpleDataset, self).__init__()
