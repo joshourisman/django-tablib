@@ -27,11 +27,14 @@ class BaseDataset(tablib.Dataset):
             return date(value, 'SHORT_DATE_FORMAT')
         else:
             return smart_unicode(value).encode('utf8')
-    
+
     def _getattrs(self, obj):
         attrs = []
         for attr in self.attr_list:
-            attr = self._cleanval(getattr(obj, attr), attr)
+            if callable(attr):
+                attr = self._cleanval(attr(obj), attr)
+            else:
+                attr = self._cleanval(getattr(obj, attr), attr)
             attrs.append(attr)
         return attrs
 
