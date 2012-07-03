@@ -17,4 +17,4 @@ class SimpleDataset(BaseDataset):
             self.header_list = headers
             self.attr_list = headers
         super(SimpleDataset, self).__init__()
-        
+
