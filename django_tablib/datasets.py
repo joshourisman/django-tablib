@@ -3,8 +3,9 @@ from __future__ import absolute_import
 from .base import BaseDataset
 
 class SimpleDataset(BaseDataset):
-    def __init__(self, queryset, headers=None):
+    def __init__(self, queryset, headers=None, encoding='utf-8'):
         self.queryset = queryset
+        self.encoding = encoding
         if headers is None:
             fields = queryset.model._meta.fields
             self.header_list = [field.name for field in fields]
