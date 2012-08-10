@@ -124,7 +124,7 @@ Django Integration
     
         admin.site.register(MyModel, MyModelAdmin)
 
-    You can also customize which fields from `MyModel` are used by supplying a `headers` list::
+    You can also customize which fields from ``MyModel`` are used by supplying a ``headers`` list::
 
         from django.contrib import admin
         from django_tablib.admin import TablibAdmin
