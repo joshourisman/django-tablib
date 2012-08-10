@@ -124,4 +124,16 @@ Django Integration
     
         admin.site.register(MyModel, MyModelAdmin)
 
+    You can also customize which fields from ``MyModel`` are used by supplying a ``headers`` list::
+
+        from django.contrib import admin
+        from django_tablib.admin import TablibAdmin
+        from myapp.models import MyModel
+    
+        class MyModelAdmin(TablibAdmin):
+            formats = ['xls', 'json', 'yaml', 'csv', 'html',]
+            headers = ['field_one', 'field_two',]
+    
+        admin.site.register(MyModel, MyModelAdmin)
+
 That's it!
