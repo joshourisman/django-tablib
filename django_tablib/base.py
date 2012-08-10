@@ -27,7 +27,7 @@ class BaseDataset(tablib.Dataset):
         if t is str:
             return value
         elif t in [datetime.date, datetime.datetime]:
-            return date(value, 'SHORT_DATE_FORMAT')
+            return date(value, 'SHORT_DATE_FORMAT').encode("utf-8")
         else:
             return smart_unicode(value).encode(self.encoding)
 
