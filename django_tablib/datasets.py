@@ -14,7 +14,7 @@ class SimpleDataset(BaseDataset):
             self.header_dict = headers
             self.header_list = self.header_dict.keys()
             self.attr_list = self.header_dict.values()
-        elif isinstance(headers, list):
+        elif isinstance(headers, (tuple, list)):
             self.header_list = headers
             self.attr_list = headers
         super(SimpleDataset, self).__init__()
