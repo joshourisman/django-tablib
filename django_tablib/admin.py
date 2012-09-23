@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils.functional import update_wrapper
 from django_tablib.views import export
+import django
 
 from .base import mimetype_map
 
