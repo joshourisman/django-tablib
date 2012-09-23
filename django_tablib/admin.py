@@ -52,19 +52,35 @@ class TablibAdmin(admin.ModelAdmin):
                       headers=self.headers, format=format, filename=filename)
 
     def get_tablib_queryset(self, request):
-        cl = ChangeList(request,
-            self.model,
-            self.list_display,
-            self.list_display_links,
-            self.list_filter,
-            self.date_hierarchy,
-            self.search_fields,
-            self.list_select_related,
-            self.list_per_page,
-            self.list_editable,
-            self,
-        )
-        return cl.get_query_set()
+        if django.VERSION >= (1, 4):
+            cl = ChangeList(request,
+                self.model,
+                self.list_display,
+                self.list_display_links,
+                self.list_filter,
+                self.date_hierarchy,
+                self.search_fields,
+                self.list_select_related,
+                self.list_per_page,
+                self.list_max_show_all,
+                self.list_editable,
+                self,
+            )
+            return cl.get_query_set(request)
+        else:   
+            cl = ChangeList(request,
+                self.model,
+                self.list_display,
+                self.list_display_links,
+                self.list_filter,
+                self.date_hierarchy,
+                self.search_fields,
+                self.list_select_related,
+                self.list_per_page,
+                self.list_editable,
+                self,
+            )
+            return cl.get_query_set()
 
     def changelist_view(self, request, extra_context=None):
         info = self.model._meta.app_label, self.model._meta.module_name
