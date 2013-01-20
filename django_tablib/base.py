@@ -24,8 +24,8 @@ class BaseDataset(tablib.Dataset):
     def _cleanval(self, value, attr):
         if callable(value):
             value = value()
-        elif value is None:
-            return u""
+        elif value is None or unicode(value) == u"None":
+            value = ""
 
         t = type(value)
         if t is str:
