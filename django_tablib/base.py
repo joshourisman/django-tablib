@@ -31,11 +31,12 @@ class BaseDataset(tablib.Dataset):
         if t is str:
             return value
         elif t is bool:
-            return _("Y") if t else _("N")
-        elif t in [datetime.date, datetime.datetime]:
-            return date(value, 'SHORT_DATE_FORMAT').encode("utf-8")
-        else:
+            value = _("Y") if t else _("N")
             return smart_unicode(value).encode(self.encoding)
+        elif t in [datetime.date, datetime.datetime]:
+            return date(value, 'SHORT_DATE_FORMAT').encode(self.encoding)
+
+        return smart_unicode(value).encode(self.encoding)
 
     def _getattrs(self, obj):
         attrs = []
@@ -47,9 +48,7 @@ class BaseDataset(tablib.Dataset):
                     value = getattr(obj, 'get_%s_display' % attr)()
                 else:
                     value = getattr(obj, attr)
-
                 attr = self._cleanval(value, attr)
-
             attrs.append(attr)
         return attrs
 
