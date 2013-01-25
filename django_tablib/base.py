@@ -3,6 +3,7 @@ import tablib
 
 from django.template.defaultfilters import date
 from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext_lazy as _
 
 mimetype_map = {
     'xls': 'application/vnd.ms-excel',
@@ -23,13 +24,19 @@ class BaseDataset(tablib.Dataset):
     def _cleanval(self, value, attr):
         if callable(value):
             value = value()
+        elif value is None or unicode(value) == u"None":
+            value = ""
+
         t = type(value)
         if t is str:
             return value
-        elif t in [datetime.date, datetime.datetime]:
-            return date(value, 'SHORT_DATE_FORMAT').encode("utf-8")
-        else:
+        elif t is bool:
+            value = _("Y") if t else _("N")
             return smart_unicode(value).encode(self.encoding)
+        elif t in [datetime.date, datetime.datetime]:
+            return date(value, 'SHORT_DATE_FORMAT').encode(self.encoding)
+
+        return smart_unicode(value).encode(self.encoding)
 
     def _getattrs(self, obj):
         attrs = []
@@ -37,7 +44,11 @@ class BaseDataset(tablib.Dataset):
             if callable(attr):
                 attr = self._cleanval(attr(obj), attr)
             else:
-                attr = self._cleanval(getattr(obj, attr), attr)
+                if hasattr(obj, 'get_%s_display' % attr):
+                    value = getattr(obj, 'get_%s_display' % attr)()
+                else:
+                    value = getattr(obj, attr)
+                attr = self._cleanval(value, attr)
             attrs.append(attr)
         return attrs
 
