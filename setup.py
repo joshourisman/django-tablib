@@ -5,14 +5,14 @@ from distutils.core import setup
 
 description = "A wrapper around Kenneth Reitz' tablib to work with Django models."
 
-VERSION = '2.4'
+VERSION = '2.4.1'
 
 setup(
     name='django-tablib',
     version=VERSION,
     author='Joshua Ourisman',
     author_email='josh@joshourisman.com',
-    url='http://bitbucket.org/Josh/django-tablib',
+    url='https://github.com/joshourisman/django-tablib',
     description=description,
     long_description=description,
     license='MIT',

@@ -137,3 +137,10 @@ Django Integration
         admin.site.register(MyModel, MyModelAdmin)
 
 That's it!
+
+Compatibility
+-------------
+
+django-tablib has been tested with Django 1.4. On Django 1.5 it does throw a deprecation warning (see `issue #25`_).
+
+.. _`issue #25`: https://github.com/joshourisman/django-tablib/issues/25
