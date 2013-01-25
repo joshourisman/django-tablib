@@ -12,7 +12,7 @@ setup(
     version=VERSION,
     author='Joshua Ourisman',
     author_email='josh@joshourisman.com',
-    url='http://bitbucket.org/Josh/django-tablib',
+    url='https://github.com/joshourisman/django-tablib',
     description=description,
     long_description=description,
     license='MIT',
