@@ -30,7 +30,7 @@ class DatasetMetaclass(type):
         if not opts.model and not opts.queryset:
             raise NoObjectsException("You must set a model or non-empty "
                                      "queryset for each Dataset subclass")
-        if opts.queryset:
+        if opts.queryset is not None:
             queryset = opts.queryset
             model = queryset.model
             new_class.queryset = queryset
