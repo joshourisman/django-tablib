@@ -11,7 +11,8 @@ mimetype_map = {
     'html': 'text/html',
     'yaml': 'text/yaml',
     'json': 'application/json',
-    }
+}
+
 
 class BaseDataset(tablib.Dataset):
 
@@ -74,4 +75,3 @@ class BaseDataset(tablib.Dataset):
             row = django_object
 
         super(BaseDataset, self).append(row=row, col=col)
-

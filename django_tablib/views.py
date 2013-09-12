@@ -21,7 +21,7 @@ def export(request, queryset=None, model=None, headers=None, format='xls',
     response = HttpResponse(
         getattr(dataset, format),
         mimetype=mimetype_map.get(format, 'application/octet-stream')
-        )
+    )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
@@ -49,8 +49,9 @@ def generic_export(request, model_name=None):
 
     model = get_model(*model_name.split(".", 2))
     if not model:
-        raise ImproperlyConfigured("Model %s is in settings.TABLIB_MODELS but"
-                                    " could not be loaded" % model_name)
+        raise ImproperlyConfigured(
+            "Model %s is in settings.TABLIB_MODELS but"
+            " could not be loaded" % model_name)
 
     qs = model._default_manager.all()
 
@@ -72,10 +73,11 @@ def generic_export(request, model_name=None):
         if allowed_lookups is None:
             return HttpResponseBadRequest(
                 "Filtering on %s is not allowed" % rel
-                )
+            )
         elif lookup_type not in allowed_lookups:
-            return HttpResponseBadRequest("%s may only be filtered using %s"
-                                            % (k, " ".join(allowed_lookups)))
+            return HttpResponseBadRequest(
+                "%s may only be filtered using %s"
+                % (k, " ".join(allowed_lookups)))
         else:
             filters[str(k)] = v
 
@@ -83,4 +85,3 @@ def generic_export(request, model_name=None):
         qs = qs.filter(**filters)
 
     return export(request, model=model, queryset=qs)
-

@@ -9,6 +9,7 @@ import django
 
 from .base import mimetype_map
 
+
 class TablibAdmin(admin.ModelAdmin):
     change_list_template = 'tablib/change_list.html'
     formats = []
@@ -39,7 +40,8 @@ class TablibAdmin(admin.ModelAdmin):
 
         info = self.model._meta.app_label, self.model._meta.module_name
 
-        urlpatterns = patterns('',
+        urlpatterns = patterns(
+            '',
             url(r'^tablib-export/(?P<format>\w+)/$',
                 wrap(self.tablib_export),
                 name='%s_%s_tablib_export' % info),
@@ -57,7 +59,8 @@ class TablibAdmin(admin.ModelAdmin):
 
     def get_tablib_queryset(self, request):
         if django.VERSION >= (1, 4):
-            cl = ChangeList(request,
+            cl = ChangeList(
+                request,
                 self.model,
                 self.list_display,
                 self.list_display_links,
@@ -71,8 +74,9 @@ class TablibAdmin(admin.ModelAdmin):
                 self,
             )
             return cl.get_query_set(request)
-        else:   
-            cl = ChangeList(request,
+        else:
+            cl = ChangeList(
+                request,
                 self.model,
                 self.list_display,
                 self.list_display_links,
@@ -91,9 +95,11 @@ class TablibAdmin(admin.ModelAdmin):
         context = {'request': request}
         urls = []
         for format in self.formats:
-            urls.append((format, reverse('admin:%s_%s_tablib_export' % info, kwargs={'format': format}),))
+            urls.append(
+                (format, reverse(
+                    'admin:%s_%s_tablib_export' % info,
+                    kwargs={'format': format}),))
         context['urls'] = urls
         context.update(extra_context or {})
 
         return super(TablibAdmin, self).changelist_view(request, context)
-
