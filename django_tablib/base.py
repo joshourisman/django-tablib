@@ -31,7 +31,7 @@ class BaseDataset(tablib.Dataset):
         if t is str:
             return value
         elif t is bool:
-            value = _("Y") if t else _("N")
+            value = _("Y") if value else _("N")
             return smart_unicode(value).encode(self.encoding)
         elif t in [datetime.date, datetime.datetime]:
             return date(value, 'SHORT_DATE_FORMAT').encode(self.encoding)
