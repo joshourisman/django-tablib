@@ -11,7 +11,8 @@ mimetype_map = {
     'html': 'text/html',
     'yaml': 'text/yaml',
     'json': 'application/json',
-    }
+}
+
 
 class BaseDataset(tablib.Dataset):
 
@@ -31,7 +32,7 @@ class BaseDataset(tablib.Dataset):
         if t is str:
             return value
         elif t is bool:
-            value = _("Y") if t else _("N")
+            value = _("Y") if value else _("N")
             return smart_unicode(value).encode(self.encoding)
         elif t in [datetime.date, datetime.datetime]:
             return date(value, 'SHORT_DATE_FORMAT').encode(self.encoding)
@@ -74,4 +75,3 @@ class BaseDataset(tablib.Dataset):
             row = django_object
 
         super(BaseDataset, self).append(row=row, col=col)
-
