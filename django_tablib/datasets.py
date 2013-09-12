@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .base import BaseDataset
 
+
 class SimpleDataset(BaseDataset):
     def __init__(self, queryset, headers=None, encoding='utf-8'):
         self.queryset = queryset
@@ -18,4 +19,3 @@ class SimpleDataset(BaseDataset):
             self.header_list = headers
             self.attr_list = headers
         super(SimpleDataset, self).__init__()
-

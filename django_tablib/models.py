@@ -2,13 +2,16 @@ from __future__ import absolute_import
 
 from .base import BaseDataset
 
+
 class NoObjectsException(Exception):
     pass
+
 
 class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
+
 
 class DatasetMetaclass(type):
     def __new__(cls, name, bases, attrs):
@@ -27,7 +30,7 @@ class DatasetMetaclass(type):
         if not opts.model and not opts.queryset:
             raise NoObjectsException("You must set a model or non-empty "
                                      "queryset for each Dataset subclass")
-        if opts.queryset:
+        if opts.queryset is not None:
             queryset = opts.queryset
             model = queryset.model
             new_class.queryset = queryset
@@ -37,8 +40,9 @@ class DatasetMetaclass(type):
             queryset = model.objects.all()
             new_class.model = model
             new_class.queryset = queryset
-        
+
         return new_class
+
 
 class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
@@ -61,4 +65,3 @@ class ModelDataset(BaseDataset):
         self.header_dict = header_dict
         self.header_list = header_list
         super(ModelDataset, self).__init__(*args, **kwargs)
-        
