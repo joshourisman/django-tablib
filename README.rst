@@ -11,6 +11,15 @@ Overview
 Usage
 -----
 
+The below examples are all based on this model: ::
+
+    from django.db import models
+
+    class MyModel(models.Model):
+        myfield1 = models.TextField()
+        myfield2 = models.TextField()
+
+
 Create a tablib Dataset from a Django model, automatically introspecting all fields from the model: ::
 
     from django_tablib import ModelDataset
