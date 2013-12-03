@@ -55,8 +55,6 @@ Create a tablib Dataset from a Django model declaratively specifying fields and 
 
     class MyModelDataset(ModelDataset):
         boring_field_name = Field(header='Awesome Descriptive Column Header')
-        id = Field()
-        some_other_field = Field()
 
         class Meta:
     	    model = MyModel
