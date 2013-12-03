@@ -19,8 +19,8 @@ class DjangoTablibTestCase(TestCase):
 
         data = TestModelDataset()
 
-        self.assertEqual(len(data.headers), 2)
-        self.assertTrue('id' not in data.headers)
+        self.assertEqual(len(data.headers), 3)
+        self.assertTrue('id' in data.headers)
         self.assertFalse('field1' in data.headers)
         self.assertTrue('field2' in data.headers)
         self.assertTrue('Field 1' in data.headers)
