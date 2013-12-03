@@ -55,7 +55,7 @@ Create a tablib Dataset from a Django model, excluding certain, undesired fields
 
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model declaratively specifying the fields to be used: ::
+Create a tablib Dataset from a Django model declaratively specifying the fields to be used (if used in conjunction with the `fields` and `exclude` lists above, the declarative fields will add to and override the otherwise existing list of fields): ::
 
     from django_tablib import ModelDataset, Field
     from myapp.models import MyModel
