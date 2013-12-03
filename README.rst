@@ -22,6 +22,30 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
     data = MyModelDataset()
 
+Create a tablib Dataset from a Django model, including only certain, desired fields: ::
+
+    from django_tablib import ModelDataset
+    from myapp.models import MyModel
+
+    class MyModelDataset(ModelDataset):
+        class Meta:
+            model = MyModel
+            fields = ['id', 'myfield1']
+
+    data = MyModelDataset()
+
+Create a tablib Dataset from a Django model, excluding certain, undesired fields (this will have identical results to the above example): ::
+
+    from django_tablib import ModelDataset
+    from myapp.models import MyModel
+
+    class MyModelDataset(ModelDataset):
+        class Meta:
+            model = MyModel
+            exclude = ['myfield2']
+
+    data = MyModelDataset()
+
 Create a tablib Dataset from a Django model declaratively specifying the fields to be used: ::
 
     from django_tablib import ModelDataset, Field
