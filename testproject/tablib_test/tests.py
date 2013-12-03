@@ -48,12 +48,14 @@ class DjangoTablibTestCase(TestCase):
     def test_declarative_fields(self):
         class TestModelDataset(ModelDataset):
             field1 = Field()
+            field2 = Field(attribute='field1')
 
             class Meta:
                 model = TestModel
 
         data = TestModelDataset()
 
-        self.assertEqual(len(data.headers), 1)
+        self.assertEqual(len(data.headers), 2)
         self.assertTrue('id' not in data.headers)
         self.assertTrue('field1' in data.headers)
+        self.assertTrue('field2' in data.headers)
