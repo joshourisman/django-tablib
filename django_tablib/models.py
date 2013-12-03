@@ -14,7 +14,7 @@ class DatasetOptions(object):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
         self.fields = getattr(options, 'fields', [])
-        self.exclude = getattr(options, 'fields', [])
+        self.exclude = getattr(options, 'exclude', [])
 
 
 class DatasetMetaclass(type):
