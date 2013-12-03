@@ -6,6 +6,9 @@ from .models import TestModel
 
 
 class DjangoTablibTestCase(TestCase):
+    def setUp(self):
+        TestModel.objects.create(field1='value')
+
     def test_declarative_fields(self):
         class TestModelDataset(ModelDataset):
             field1 = Field()
@@ -20,3 +23,5 @@ class DjangoTablibTestCase(TestCase):
         self.assertTrue('id' not in data.headers)
         self.assertTrue('field1' in data.headers)
         self.assertTrue('field2' in data.headers)
+
+        self.assertEqual(data[0][0], data[0][1])
