@@ -13,6 +13,8 @@ class DatasetOptions(object):
     def __init__(self, options=None):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
+        self.fields = getattr(options, 'fields', [])
+        self.exclude = getattr(options, 'fields', [])
 
 
 class DatasetMetaclass(type):
@@ -69,7 +71,13 @@ class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
 
     def __init__(self, *args, **kwargs):
-        self.fields = deepcopy(self.base_fields)
+        self.fields = {
+            field.name: Field() for field in self.model._meta.fields
+            if field.name in self._meta.fields
+            or field.name not in self._meta.exclude
+        }
+        self.fields.update(deepcopy(self.base_fields))
+
         fields = [
             field.attribute or name for name, field in self.fields.items()
         ]
