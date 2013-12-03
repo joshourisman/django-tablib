@@ -74,7 +74,8 @@ class ModelDataset(BaseDataset):
             field.attribute or name for name, field in self.fields.items()
         ]
         header_dict = {
-            name: field.attribute or name for name, field in self.fields.items()
+            field.header or name: field.attribute or name
+            for name, field in self.fields.items()
         }
         header_list = header_dict.keys()
 
