@@ -18,7 +18,7 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
     class MyModelDataset(ModelDataset):
         class Meta:
-	    model = MyModel
+            model = MyModel
 
     data = MyModelDataset()
 
@@ -33,7 +33,7 @@ Create a tablib Dataset from a Django model declaratively specifying the fields 
         myfield2 = Field()
 
         class Meta:
-	    model = MyModel
+            model = MyModel
 
     data = MyModelDataset()
 
@@ -44,7 +44,7 @@ Create a tablib Dataset from a Django QuerySet: ::
 
     class MyModelDataset(ModelDataset):
         class Meta:
-	    queryset = MyModel.objects.filter(is_awesome=True)
+            queryset = MyModel.objects.filter(is_awesome=True)
 
     data = MyModelDataset()
 
@@ -57,7 +57,7 @@ Create a tablib Dataset from a Django model declaratively specifying fields and 
         boring_field_name = Field(header='Awesome Descriptive Column Header')
 
         class Meta:
-    	    model = MyModel
+            model = MyModel
 
     data = MyModelDataset()
 
