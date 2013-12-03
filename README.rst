@@ -1,7 +1,7 @@
 django-tablib: tablib for Django
 ================================
 
-django-tablib is a helper library for Django that allows Django models to be used to generate tablib datasets with introspection of the fields on the models if no headers are provided. If headers are provided they can reference any attribute, fields, properties, or methods on the model.
+django-tablib is a helper library for Django that allows tablib datasets to be generated from Django models.
 
 Overview
 --------
@@ -11,6 +11,15 @@ Overview
 Usage
 -----
 
+The below examples are all based on this model: ::
+
+    from django.db import models
+
+    class MyModel(models.Model):
+        myfield1 = models.TextField()
+        myfield2 = models.TextField()
+
+
 Create a tablib Dataset from a Django model, automatically introspecting all fields from the model: ::
 
     from django_tablib import ModelDataset
@@ -18,24 +27,50 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
     class MyModelDataset(ModelDataset):
         class Meta:
-	    model = MyModel
+            model = MyModel
 
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model with a custom list of fields: ::
+Create a tablib Dataset from a Django model, including only certain, desired fields: ::
 
     from django_tablib import ModelDataset
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        fields = [
-            'id',
-            'myfield1',
-            'myfield2',
-        ]
         class Meta:
-	    model = MyModel
+            model = MyModel
+            fields = ['id', 'myfield1']
 
+    # This dataset will have the fields 'id', and 'myfield1'.
+    data = MyModelDataset()
+
+Create a tablib Dataset from a Django model, excluding certain, undesired fields: ::
+
+    from django_tablib import ModelDataset
+    from myapp.models import MyModel
+
+    class MyModelDataset(ModelDataset):
+        class Meta:
+            model = MyModel
+            exclude = ['myfield2']
+
+    # This dataset will have the fields 'id', and 'myfield1'.
+    data = MyModelDataset()
+
+Create a tablib Dataset from a Django model declaratively specifying the fields to be used: ::
+
+    from django_tablib import ModelDataset, Field
+    from myapp.models import MyModel
+
+    class MyModelDataset(ModelDataset):
+        myfield1 = Field()
+        myfield2 = Field()
+
+        class Meta:
+            model = MyModel
+
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
 Create a tablib Dataset from a Django QuerySet: ::
@@ -45,27 +80,24 @@ Create a tablib Dataset from a Django QuerySet: ::
 
     class MyModelDataset(ModelDataset):
         class Meta:
-	    queryset = MyModel.objects.filter(is_awesome=True)
+            queryset = MyModel.objects.filter(is_awesome=True)
 
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model with a dictionary mapping custom headers to attributes of your Django objects: ::
+Create a tablib Dataset from a Django model declaratively specifying fields and their headers: ::
 
-    from django_tablib import ModelDataset
+    from django_tablib import ModelDataset, Field
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        fields = [
-            'boring_field_name',
-            'id',
-            'some_other_field',
-        ]
-        headers = {
-            'boring_field_name': 'Awesome Descriptive Column Header',
-        }
-        class Meta:
-	    model = MyModel
+        myfield1 = Field(header='No More Boring Field Names!')
 
+        class Meta:
+            model = MyModel
+
+    # This dataset will have the fields 'id',
+    # 'No More Boring Field Names' and 'myfield2'.
     data = MyModelDataset()
 
 Add a new row: ::
@@ -118,10 +150,10 @@ Django Integration
         from django.contrib import admin
         from django_tablib.admin import TablibAdmin
         from myapp.models import MyModel
-    
+
         class MyModelAdmin(TablibAdmin):
             formats = ['xls', 'json', 'yaml', 'csv', 'html',]
-    
+
         admin.site.register(MyModel, MyModelAdmin)
 
     You can also customize which fields from ``MyModel`` are used by supplying a ``headers`` list::
@@ -129,11 +161,11 @@ Django Integration
         from django.contrib import admin
         from django_tablib.admin import TablibAdmin
         from myapp.models import MyModel
-    
+
         class MyModelAdmin(TablibAdmin):
             formats = ['xls', 'json', 'yaml', 'csv', 'html',]
             headers = ['field_one', 'field_two',]
-    
+
         admin.site.register(MyModel, MyModelAdmin)
 
 That's it!
