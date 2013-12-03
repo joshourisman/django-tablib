@@ -1,7 +1,7 @@
 django-tablib: tablib for Django
 ================================
 
-django-tablib is a helper library for Django that allows Django models to be used to generate tablib datasets with introspection of the fields on the models if no headers are provided. If headers are provided they can reference any attribute, fields, properties, or methods on the model.
+django-tablib is a helper library for Django that allows tablib datasets to be generated from Django models.
 
 Overview
 --------
