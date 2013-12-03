@@ -29,3 +29,18 @@ class DjangoTablibTestCase(TestCase):
         self.assertEqual(len(data.headers), 1)
         self.assertTrue('id' not in data.headers)
         self.assertTrue('field1' in data.headers)
+
+    def test_headers(self):
+        class TestModelDataset(ModelDataset):
+            fields = ['field1']
+            headers = {'field1': 'Field 1'}
+
+            class Meta:
+                model = TestModel
+
+        data = TestModelDataset()
+
+        self.assertEqual(len(data.headers), 1)
+        self.assertTrue('id' not in data.headers)
+        self.assertTrue('field1' not in data.headers)
+        self.assertTrue('Field 1' in data.headers)
