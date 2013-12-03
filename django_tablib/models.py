@@ -68,21 +68,17 @@ class DatasetMetaclass(type):
 class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
 
-    headers = None
-
     def __init__(self, *args, **kwargs):
         self.fields = deepcopy(self.base_fields)
         fields = [
             field.attribute or name for name, field in self.fields.items()
         ]
+        header_dict = {
+            name: field.attribute or name for name, field in self.fields.items()
+        }
+        header_list = header_dict.keys()
 
         self.attr_list = fields
-        if self.headers is not None:
-            header_dict = self.headers
-            header_list = [self.headers.get(field, field) for field in fields]
-        else:
-            header_dict = None
-            header_list = fields
         self.header_dict = header_dict
         self.header_list = header_list
         super(ModelDataset, self).__init__(*args, **kwargs)
