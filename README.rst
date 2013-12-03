@@ -22,17 +22,16 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
 
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model with a custom list of fields: ::
+Create a tablib Dataset from a Django model declaratively specifying the fields to be used: ::
 
-    from django_tablib import ModelDataset
+    from django_tablib import ModelDataset, Field
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        fields = [
-            'id',
-            'myfield1',
-            'myfield2',
-        ]
+        id = Field()
+        myfield1 = Field()
+        myfield2 = Field()
+
         class Meta:
 	    model = MyModel
 
@@ -49,22 +48,18 @@ Create a tablib Dataset from a Django QuerySet: ::
 
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model with a dictionary mapping custom headers to attributes of your Django objects: ::
+Create a tablib Dataset from a Django model declaratively specifying fields and their headers: ::
 
-    from django_tablib import ModelDataset
+    from django_tablib import ModelDataset, Field
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        fields = [
-            'boring_field_name',
-            'id',
-            'some_other_field',
-        ]
-        headers = {
-            'boring_field_name': 'Awesome Descriptive Column Header',
-        }
+        boring_field_name = Field(header='Awesome Descriptive Column Header')
+        id = Field()
+        some_other_field = Field()
+
         class Meta:
-	    model = MyModel
+    	    model = MyModel
 
     data = MyModelDataset()
 
@@ -118,10 +113,10 @@ Django Integration
         from django.contrib import admin
         from django_tablib.admin import TablibAdmin
         from myapp.models import MyModel
-    
+
         class MyModelAdmin(TablibAdmin):
             formats = ['xls', 'json', 'yaml', 'csv', 'html',]
-    
+
         admin.site.register(MyModel, MyModelAdmin)
 
     You can also customize which fields from ``MyModel`` are used by supplying a ``headers`` list::
@@ -129,11 +124,11 @@ Django Integration
         from django.contrib import admin
         from django_tablib.admin import TablibAdmin
         from myapp.models import MyModel
-    
+
         class MyModelAdmin(TablibAdmin):
             formats = ['xls', 'json', 'yaml', 'csv', 'html',]
             headers = ['field_one', 'field_two',]
-    
+
         admin.site.register(MyModel, MyModelAdmin)
 
 That's it!
