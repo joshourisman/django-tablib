@@ -29,6 +29,7 @@ Create a tablib Dataset from a Django model, automatically introspecting all fie
         class Meta:
             model = MyModel
 
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
 Create a tablib Dataset from a Django model, including only certain, desired fields: ::
@@ -41,9 +42,10 @@ Create a tablib Dataset from a Django model, including only certain, desired fie
             model = MyModel
             fields = ['id', 'myfield1']
 
+    # This dataset will have the fields 'id', and 'myfield1'.
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model, excluding certain, undesired fields (this will have identical results to the above example): ::
+Create a tablib Dataset from a Django model, excluding certain, undesired fields: ::
 
     from django_tablib import ModelDataset
     from myapp.models import MyModel
@@ -53,21 +55,22 @@ Create a tablib Dataset from a Django model, excluding certain, undesired fields
             model = MyModel
             exclude = ['myfield2']
 
+    # This dataset will have the fields 'id', and 'myfield1'.
     data = MyModelDataset()
 
-Create a tablib Dataset from a Django model declaratively specifying the fields to be used (if used in conjunction with the `fields` and `exclude` lists above, the declarative fields will add to and override the otherwise existing list of fields): ::
+Create a tablib Dataset from a Django model declaratively specifying the fields to be used: ::
 
     from django_tablib import ModelDataset, Field
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        id = Field()
         myfield1 = Field()
         myfield2 = Field()
 
         class Meta:
             model = MyModel
 
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
 Create a tablib Dataset from a Django QuerySet: ::
@@ -79,6 +82,7 @@ Create a tablib Dataset from a Django QuerySet: ::
         class Meta:
             queryset = MyModel.objects.filter(is_awesome=True)
 
+    # This dataset will have the fields 'id', 'myfield1' and 'myfield2'.
     data = MyModelDataset()
 
 Create a tablib Dataset from a Django model declaratively specifying fields and their headers: ::
@@ -87,11 +91,13 @@ Create a tablib Dataset from a Django model declaratively specifying fields and 
     from myapp.models import MyModel
 
     class MyModelDataset(ModelDataset):
-        boring_field_name = Field(header='Awesome Descriptive Column Header')
+        myfield1 = Field(header='No More Boring Field Names!')
 
         class Meta:
             model = MyModel
 
+    # This dataset will have the fields 'id',
+    # 'No More Boring Field Names' and 'myfield2'.
     data = MyModelDataset()
 
 Add a new row: ::
