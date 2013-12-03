@@ -71,11 +71,13 @@ class ModelDataset(BaseDataset):
     __metaclass__ = DatasetMetaclass
 
     def __init__(self, *args, **kwargs):
-        self.fields = {
-            field.name: Field() for field in self.model._meta.fields
-            if field.name in self._meta.fields
-            or field.name not in self._meta.exclude
-        }
+        included = [field.name for field in self.model._meta.fields]
+        if self._meta.fields:
+            included = filter(lambda x: x in self._meta.fields, included)
+        if self._meta.exclude:
+            included = filter(lambda x: x not in self._meta.exclude, included)
+
+        self.fields = {field: Field() for field in included}
         self.fields.update(deepcopy(self.base_fields))
 
         fields = [
