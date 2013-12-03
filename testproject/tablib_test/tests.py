@@ -12,7 +12,7 @@ class DjangoTablibTestCase(TestCase):
     def test_declarative_fields(self):
         class TestModelDataset(ModelDataset):
             field1 = Field(header='Field 1')
-            field2 = Field(attribute='field1', header='Field 2')
+            field2 = Field(attribute='field1')
 
             class Meta:
                 model = TestModel
@@ -22,8 +22,7 @@ class DjangoTablibTestCase(TestCase):
         self.assertEqual(len(data.headers), 2)
         self.assertTrue('id' not in data.headers)
         self.assertFalse('field1' in data.headers)
-        self.assertFalse('field2' in data.headers)
+        self.assertTrue('field2' in data.headers)
         self.assertTrue('Field 1' in data.headers)
-        self.assertTrue('Field 2' in data.headers)
 
         self.assertEqual(data[0][0], data[0][1])
