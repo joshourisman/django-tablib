@@ -5,10 +5,15 @@ from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.utils.functional import update_wrapper
 
-from .base import mimetype_map
-from .views import export
+from django_tablib.base import mimetype_map
+from django_tablib.views import export
+
+try:
+    from django.utils.functional import update_wrapper
+except ImportError:
+    # Removed in Django 1.6; fallback on stdlib.
+    from functools import update_wrapper
 
 
 class TablibAdmin(admin.ModelAdmin):
