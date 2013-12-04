@@ -5,7 +5,7 @@ from django_tablib import TablibAdmin
 from .models import TestModel
 
 
-class TestModeAdmin(TablibAdmin):
+class TestModelAdmin(TablibAdmin):
     pass
 
-admin.site.register(TestModel, TestModeAdmin)
+admin.site.register(TestModel, TestModelAdmin)
