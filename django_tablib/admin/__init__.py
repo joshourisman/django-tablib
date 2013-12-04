@@ -6,8 +6,8 @@ from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
 from django.http import Http404
 
-from .base import mimetype_map
-from .views import export
+from django_tablib.base import mimetype_map
+from django_tablib.views import export
 
 try:
     from django.utils.functional import update_wrapper
