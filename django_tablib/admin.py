@@ -1,13 +1,14 @@
 import datetime
+import django
+
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils.functional import update_wrapper
-from django_tablib.views import export
-import django
 
 from .base import mimetype_map
+from .views import export
 
 
 class TablibAdmin(admin.ModelAdmin):
@@ -21,8 +22,8 @@ class TablibAdmin(admin.ModelAdmin):
             if format not in mimetype_map:
                 msg = "%s is not a valid export format, please choose" \
                     " from the following options: %s" % (
-                    format,
-                    ', '.join(mimetype_map.keys()),
+                        format,
+                        ', '.join(mimetype_map.keys()),
                     )
                 raise ValueError(msg)
         super(TablibAdmin, self).__init__(*args, **kwargs)
