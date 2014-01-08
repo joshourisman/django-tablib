@@ -10,10 +10,10 @@ from django_tablib.base import mimetype_map
 from django_tablib.views import export
 
 try:
-    from django.utils.functional import update_wrapper
-except ImportError:
-    # Removed in Django 1.6; fallback on stdlib.
+    # Removed in Django 1.6; default to stdlib.
     from functools import update_wrapper
+except ImportError:
+    from django.utils.functional import update_wrapper
 
 
 class TablibAdmin(admin.ModelAdmin):
