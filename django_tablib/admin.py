@@ -3,7 +3,11 @@ from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.utils.functional import update_wrapper
+try:
+    from functools import update_wrapper
+except ImportError:
+    from django.utils.functional import update_wrapper
+
 from django_tablib.views import export
 import django
 
