@@ -3,7 +3,8 @@
 from distutils.core import setup
 
 
-description = "A wrapper around Kenneth Reitz' tablib to work with Django models."
+description = "A wrapper around Kenneth Reitz' tablib to work with Django " \
+    "models."
 
 VERSION = '3.0.2'
 
@@ -25,8 +26,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        ],
-    packages=['django_tablib',],
-    package_data = {'django_tablib': ['templates/tablib/*',],},
-    install_requires=['tablib',],
-    )
+    ],
+    packages=['django_tablib', ],
+    package_data={'django_tablib': ['templates/tablib/*', ], },
+    install_requires=['tablib', ],
+)
