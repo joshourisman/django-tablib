@@ -28,6 +28,6 @@ setup(
         'Programming Language :: Python',
     ],
     packages=['django_tablib', ],
-    package_data={'django_tablib': ['templates/tablib/*', ], },
+    package_data={'django_tablib': ['templates/tablib/*', 'admin/*'], },
     install_requires=['tablib', ],
 )
