@@ -1,2 +1,8 @@
 *.pyc
 db.sqlite3
+
+# PyCharm
+.idea/*
+
+# Mac OS X
+.DS_Store

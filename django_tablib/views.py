@@ -1,9 +1,11 @@
 from __future__ import absolute_import
+from collections import OrderedDict
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.db.models.loading import get_model
+from django.views.generic import ListView
 
 from .base import mimetype_map
 from .datasets import SimpleDataset
@@ -85,3 +87,87 @@ def generic_export(request, model_name=None):
         qs = qs.filter(**filters)
 
     return export(request, model=model, queryset=qs)
+
+
+class BaseExportView(ListView):
+    # Default file name
+    filename = 'export'
+    # Lookup name for format in url or GET, not used if default format is set
+    format_name = 'format'
+    # Default format if lookups fail
+    format_default = 'csv'
+    # Columns to expert, either a name or a (name, accessor) tuple, e.g. ('user', 'user__username')
+    columns = []
+    # Internal, used to store column names and accessors while keeping order
+    _ordered_columns = OrderedDict()
+
+    def __init__(self, *args, **kwargs):
+        """
+        Call parent class constructors and build ordered dict of column names and accessors
+        """
+        super(BaseExportView, self).__init__(*args, **kwargs)
+        for column in self.columns:
+            if isinstance(column, basestring):
+                header = column
+                accessor = column
+            else:
+                header = column[0]
+                accessor = column[1]
+            self._ordered_columns[header] = accessor
+
+    def get_headers(self):
+        """
+        Return an array containing headers
+        """
+        return self._ordered_columns.keys()
+
+    def get_accessors(self):
+        """
+        Return an array containing the accessors
+        """
+        return self._ordered_columns.values()
+
+    def get_format(self):
+        """
+        Return the export format
+        """
+        format = self.kwargs.get(self.format_name, None)
+        if not format:
+            format = self.request.GET.get(self.format_name, None)
+        if not format:
+            format = self.format_default
+        return format
+
+    def render_to_cell(self, row, column):
+        """
+        Render a value
+        """
+        accessor = self._ordered_columns[column]
+        value = row[accessor]
+        renderer = getattr(self, 'render_%s' % column, None)
+        if callable(renderer):
+            cell = renderer(value=value, row=row, column=column, accessor=accessor)
+        else:
+            cell = value
+        return cell
+
+    def render_to_response(self, context, **kwargs):
+        """
+        Render the response
+        """
+        format = self.get_format()
+        accessors = self.get_accessors()
+        data = Dataset()
+        data.headers = self.get_headers()
+        for row in self.get_queryset().values(*accessors):
+            cells = []
+            for column in self._ordered_columns:
+                cells.append(self.render_to_cell(row, column))
+            data.append(cells)
+        response = HttpResponse(
+            getattr(data, format),
+            mimetype=mimetype_map.get(format, 'application/octet-stream')
+        )
+        response['Content-Disposition'] = 'attachment; filename=%s.%s' % (self.filename, format)
+        return response
+
