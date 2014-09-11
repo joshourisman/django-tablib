@@ -19,7 +19,7 @@ def tablib_export_action(modeladmin, request, queryset, format="xls"):
     filename = '%s.%s' % (
         smart_str(modeladmin.model._meta.verbose_name_plural), format)
     response = HttpResponse(
-        getattr(dataset, format), mimetype=mimetype_map.get(
+        getattr(dataset, format), content_type=mimetype_map.get(
             format, 'application/octet-stream'))
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response

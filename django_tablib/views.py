@@ -20,7 +20,7 @@ def export(request, queryset=None, model=None, headers=None, format='xls',
         raise Http404
     response = HttpResponse(
         getattr(dataset, format),
-        mimetype=mimetype_map.get(format, 'application/octet-stream')
+        content_type=mimetype_map.get(format, 'application/octet-stream')
     )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
