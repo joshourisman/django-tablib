@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from django import get_version
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -18,10 +19,13 @@ def export(request, queryset=None, model=None, headers=None, format='xls',
     filename = '%s.%s' % (filename, format)
     if not hasattr(dataset, format):
         raise Http404
-    response = HttpResponse(
-        getattr(dataset, format),
-        content_type=mimetype_map.get(format, 'application/octet-stream')
-    )
+
+    response_kwargs = {}
+    key = 'content_type' if get_version().split('.')[1] > 6 else 'mimetype'
+    response_kwargs[key] = mimetype_map.get(format, 'application/octet-stream')
+
+    response = HttpResponse(getattr(dataset, format), **response_kwargs)
+
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
