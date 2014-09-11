@@ -10,21 +10,22 @@ from .base import mimetype_map
 from .datasets import SimpleDataset
 
 
-def export(request, queryset=None, model=None, headers=None, format='xls',
+def export(request, queryset=None, model=None, headers=None, file_type='xls',
            filename='export'):
     if queryset is None:
         queryset = model.objects.all()
 
     dataset = SimpleDataset(queryset, headers=headers)
-    filename = '%s.%s' % (filename, format)
-    if not hasattr(dataset, format):
+    filename = '%s.%s' % (filename, file_type)
+    if not hasattr(dataset, file_type):
         raise Http404
 
     response_kwargs = {}
     key = 'content_type' if get_version().split('.')[1] > 6 else 'mimetype'
-    response_kwargs[key] = mimetype_map.get(format, 'application/octet-stream')
+    response_kwargs[key] = mimetype_map.get(
+        file_type, 'application/octet-stream')
 
-    response = HttpResponse(getattr(dataset, format), **response_kwargs)
+    response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
 
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response

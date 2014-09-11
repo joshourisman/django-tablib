@@ -7,7 +7,7 @@ from django_tablib.datasets import SimpleDataset
 from django_tablib.base import mimetype_map
 
 
-def tablib_export_action(modeladmin, request, queryset, format="xls"):
+def tablib_export_action(modeladmin, request, queryset, file_type="xls"):
     """
     Allow the user to download the current filtered list of items
 
@@ -18,13 +18,14 @@ def tablib_export_action(modeladmin, request, queryset, format="xls"):
 
     dataset = SimpleDataset(queryset, headers=None)
     filename = '%s.%s' % (
-        smart_str(modeladmin.model._meta.verbose_name_plural), format)
+        smart_str(modeladmin.model._meta.verbose_name_plural), file_type)
 
     response_kwargs = {}
     key = 'content_type' if get_version().split('.')[1] > 6 else 'mimetype'
-    response_kwargs[key] = mimetype_map.get(format, 'application/octet-stream')
+    response_kwargs[key] = mimetype_map.get(
+        file_type, 'application/octet-stream')
 
-    response = HttpResponse(getattr(dataset, format), **response_kwargs)
+    response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
