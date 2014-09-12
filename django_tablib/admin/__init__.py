@@ -61,7 +61,7 @@ class TablibAdmin(admin.ModelAdmin):
         queryset = self.get_tablib_queryset(request)
         filename = datetime.datetime.now().strftime(self.export_filename)
         return export(request, queryset=queryset, model=self.model,
-                      headers=self.headers, format=format, filename=filename)
+                      headers=self.headers, file_type=format, filename=filename)
 
     def get_tablib_queryset(self, request):
         if django.VERSION >= (1, 4):
