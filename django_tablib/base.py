@@ -2,7 +2,7 @@ import datetime
 import tablib
 
 from django.template.defaultfilters import date
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 mimetype_map = {
@@ -31,7 +31,7 @@ class BaseDataset(tablib.Dataset):
         elif isinstance(value, (datetime.date, datetime.datetime)):
             value = date(value, 'SHORT_DATE_FORMAT')
 
-        return smart_unicode(value)
+        return force_text(value)
 
     def _getattrs(self, obj):
         attrs = []
