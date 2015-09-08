@@ -29,5 +29,5 @@ setup(
     ],
     packages=['django_tablib', ],
     package_data={'django_tablib': ['templates/tablib/*', 'admin/*'], },
-    install_requires=['tablib', ],
+    install_requires=['tablib', 'six'],
 )
