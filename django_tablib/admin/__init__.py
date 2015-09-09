@@ -43,7 +43,8 @@ class TablibAdmin(admin.ModelAdmin):
 
     def get_info(self):
         """
-        Get model info in a form of (app_label, model_name).
+        Helper method to get model info in a form of (app_label, model_name).
+        Avoid deprecation warnings and failures with different Django versions.
         """
         if LooseVersion(django.get_version()) < LooseVersion('1.7.0'):
             info = self.model._meta.app_label, self.model._meta.module_name
