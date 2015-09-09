@@ -1,10 +1,14 @@
 from __future__ import absolute_import
 
-from django import get_version
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.db.models.loading import get_model
+
+try:
+    from django.apps import apps
+    get_model = apps.get_model
+except ImportError:
+    from django.db.models.loading import get_model
 
 from .base import mimetype_map
 from .datasets import SimpleDataset
@@ -16,18 +20,19 @@ def export(request, queryset=None, model=None, headers=None, file_type='xls',
         queryset = model.objects.all()
 
     dataset = SimpleDataset(queryset, headers=headers)
-    filename = '%s.%s' % (filename, file_type)
+    filename = '{0}.{1}'.format(filename, file_type)
     if not hasattr(dataset, file_type):
         raise Http404
 
     response_kwargs = {}
-    key = 'content_type' if get_version().split('.')[1] > 6 else 'mimetype'
+    key = 'content_type'
     response_kwargs[key] = mimetype_map.get(
         file_type, 'application/octet-stream')
 
     response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
 
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(
+        filename)
     return response
 
 
@@ -37,7 +42,8 @@ def generic_export(request, model_name=None):
 
     Usage:
         1. Add the view to ``urlpatterns`` in ``urls.py``::
-            url(r'export/(?P<model_name>[^/]+)/$', "django_tablib.views.generic_export"),
+            url(r'export/(?P<model_name>[^/]+)/$',
+                "django_tablib.views.generic_export"),
         2. Create the ``settings.TABLIB_MODELS`` dictionary using model names
            as keys the allowed lookup operators as values, if any::
 
@@ -55,8 +61,8 @@ def generic_export(request, model_name=None):
     model = get_model(*model_name.split(".", 2))
     if not model:
         raise ImproperlyConfigured(
-            "Model %s is in settings.TABLIB_MODELS but"
-            " could not be loaded" % model_name)
+            "Model {0} is in settings.TABLIB_MODELS but"
+            " could not be loaded".format(model_name))
 
     qs = model._default_manager.all()
 
@@ -77,12 +83,12 @@ def generic_export(request, model_name=None):
 
         if allowed_lookups is None:
             return HttpResponseBadRequest(
-                "Filtering on %s is not allowed" % rel
+                "Filtering on {0} is not allowed".format(rel)
             )
         elif lookup_type not in allowed_lookups:
             return HttpResponseBadRequest(
-                "%s may only be filtered using %s"
-                % (k, " ".join(allowed_lookups)))
+                "{0} may only be filtered using {1}".format(
+                    k, " ".join(allowed_lookups)))
         else:
             filters[str(k)] = v
 
