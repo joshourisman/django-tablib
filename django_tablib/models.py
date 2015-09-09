@@ -83,15 +83,10 @@ class ModelDataset(six.with_metaclass(DatasetMetaclass, BaseDataset)):
 
         self.fields.update(deepcopy(self.base_fields))
 
-        fields = [
-            field.attribute or name for name, field in self.fields.items()
-        ]
-        header_dict = dict((field.header or name, field.attribute or name) for
-            name, field in self.fields.items())
+        self.header_dict = dict(
+            (field.header or name, field.attribute or name)
+            for name, field in self.fields.items())
 
-        header_list = header_dict.keys()
-
-        self.attr_list = fields
-        self.header_dict = header_dict
-        self.header_list = header_list
+        self.header_list = self.header_list.keys()
+        self.attr_list = [self.header_dict[h] for h in self.header_list]
         super(ModelDataset, self).__init__(*args, **kwargs)
