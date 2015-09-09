@@ -33,6 +33,7 @@ class TablibAdmin(admin.ModelAdmin):
     # enable Export to _format_ admin actions by default, this allows to export
     # only selected items.
     enable_admin_actions = True
+    export_encoding = 'utf-8'
 
     def __init__(self, *args, **kwargs):
         for export_format in self.formats:
@@ -75,7 +76,7 @@ class TablibAdmin(admin.ModelAdmin):
         filename = datetime.datetime.now().strftime(self.export_filename)
         return export(request, queryset=queryset, model=self.model,
                       headers=self.headers, file_type=export_format,
-                      filename=filename)
+                      filename=filename, encoding=self.export_encoding)
 
     def get_tablib_queryset(self, request):
         # allow other admin clases to override change list view,

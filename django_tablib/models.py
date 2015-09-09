@@ -87,6 +87,6 @@ class ModelDataset(six.with_metaclass(DatasetMetaclass, BaseDataset)):
             (field.header or name, field.attribute or name)
             for name, field in self.fields.items())
 
-        self.header_list = self.header_list.keys()
+        self.header_list = self.header_dict.keys()
         self.attr_list = [self.header_dict[h] for h in self.header_list]
         super(ModelDataset, self).__init__(*args, **kwargs)
