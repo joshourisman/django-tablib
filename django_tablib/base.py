@@ -17,6 +17,15 @@ mimetype_map = {
 }
 
 
+def get_content_type(export_format, encoding='utf-8'):
+    """
+    Simple wrapper to ensure that content type is set with respect to encoding
+    """
+    return '{0}; charset={1}'.format(
+        mimetype_map.get(export_format, 'application/octet-stream'),
+        encoding)
+
+
 class BaseDataset(tablib.Dataset):
 
     def __init__(self):
@@ -26,7 +35,7 @@ class BaseDataset(tablib.Dataset):
     def _cleanval(self, value, attr):
         if callable(value):
             value = value()
-        elif value is None or tablib.compat.unicode(value) == u"None":
+        elif value is None or tablib.compat.unicode(value) == "None":
             value = ""
 
         if isinstance(value, bool):
