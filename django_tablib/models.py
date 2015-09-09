@@ -79,19 +79,14 @@ class ModelDataset(six.with_metaclass(DatasetMetaclass, BaseDataset)):
         if self._meta.exclude:
             included = filter(lambda x: x not in self._meta.exclude, included)
 
-        self.fields = {field: Field() for field in included}
+        self.fields = dict((field, Field()) for field in included)
+
         self.fields.update(deepcopy(self.base_fields))
 
-        fields = [
-            field.attribute or name for name, field in self.fields.items()
-        ]
-        header_dict = {
-            field.header or name: field.attribute or name
-            for name, field in self.fields.items()
-        }
-        header_list = header_dict.keys()
+        self.header_dict = dict(
+            (field.header or name, field.attribute or name)
+            for name, field in self.fields.items())
 
-        self.attr_list = fields
-        self.header_dict = header_dict
-        self.header_list = header_list
+        self.header_list = self.header_dict.keys()
+        self.attr_list = [self.header_dict[h] for h in self.header_list]
         super(ModelDataset, self).__init__(*args, **kwargs)
