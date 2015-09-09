@@ -85,7 +85,9 @@ class TablibAdmin(admin.ModelAdmin):
         list_display = self.get_list_display(request)
         list_display_links = self.get_list_display_links(request, list_display)
         list_filter = self.get_list_filter(request)
-        search_fields = self.get_search_fields(request)
+        search_fields = (self.get_search_fields(request)
+                         if hasattr(self, 'get_search_fields')
+                         else self.search_fields)
 
         cl = ChangeList(
             request,
