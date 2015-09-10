@@ -7,7 +7,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from django_tablib.datasets import SimpleDataset
-from django_tablib.base import mimetype_map
+from django_tablib.base import get_content_type
 
 
 def tablib_export_action(modeladmin, request, queryset, file_type="xls"):
@@ -23,10 +23,9 @@ def tablib_export_action(modeladmin, request, queryset, file_type="xls"):
     filename = '{0}.{1}'.format(
         smart_str(modeladmin.model._meta.verbose_name_plural), file_type)
 
-    response_kwargs = {}
-    key = 'content_type' if get_version().split('.')[1] > 6 else 'mimetype'
-    response_kwargs[key] = mimetype_map.get(
-        file_type, 'application/octet-stream')
+    response_kwargs = {
+        'content_type': get_content_type(file_type)
+    }
 
     response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
     response['Content-Disposition'] = 'attachment; filename={0}'.format(

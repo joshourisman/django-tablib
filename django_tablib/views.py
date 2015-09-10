@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -10,12 +11,12 @@ try:
 except ImportError:
     from django.db.models.loading import get_model
 
-from .base import mimetype_map
+from .base import get_content_type
 from .datasets import SimpleDataset
 
 
 def export(request, queryset=None, model=None, headers=None, file_type='xls',
-           filename='export'):
+           filename='export', encoding='utf-8'):
     if queryset is None:
         queryset = model.objects.all()
 
@@ -24,10 +25,9 @@ def export(request, queryset=None, model=None, headers=None, file_type='xls',
     if not hasattr(dataset, file_type):
         raise Http404
 
-    response_kwargs = {}
-    key = 'content_type'
-    response_kwargs[key] = mimetype_map.get(
-        file_type, 'application/octet-stream')
+    response_kwargs = {
+        'content_type': get_content_type(file_type, encoding=encoding)
+    }
 
     response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
 
