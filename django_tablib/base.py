@@ -5,7 +5,7 @@ import datetime
 import tablib
 
 from django.template.defaultfilters import date
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 mimetype_map = {
@@ -19,8 +19,6 @@ mimetype_map = {
 
 class BaseDataset(tablib.Dataset):
 
-    encoding = 'utf-8'
-
     def __init__(self):
         data = map(self._getattrs, self.queryset)
         super(BaseDataset, self).__init__(headers=self.header_list, *data)
@@ -28,19 +26,15 @@ class BaseDataset(tablib.Dataset):
     def _cleanval(self, value, attr):
         if callable(value):
             value = value()
-        elif value is None or unicode(value) == u"None":
+        elif value is None or tablib.compat.unicode(value) == u"None":
             value = ""
 
-        t = type(value)
-        if t is str:
-            return value
-        elif t is bool:
+        if isinstance(value, bool):
             value = _("Y") if value else _("N")
-            return smart_unicode(value).encode(self.encoding)
-        elif t in [datetime.date, datetime.datetime]:
-            return date(value, 'SHORT_DATE_FORMAT').encode(self.encoding)
+        elif isinstance(value, (datetime.date, datetime.datetime)):
+            value = date(value, 'SHORT_DATE_FORMAT')
 
-        return smart_unicode(value).encode(self.encoding)
+        return force_text(value)
 
     def _getattrs(self, obj):
         attrs = []
