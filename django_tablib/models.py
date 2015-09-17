@@ -1,4 +1,7 @@
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
+import six
 from copy import deepcopy
 
 from .base import BaseDataset
@@ -67,8 +70,7 @@ class DatasetMetaclass(type):
         return new_class
 
 
-class ModelDataset(BaseDataset):
-    __metaclass__ = DatasetMetaclass
+class ModelDataset(six.with_metaclass(DatasetMetaclass, BaseDataset)):
 
     def __init__(self, *args, **kwargs):
         included = [field.name for field in self.model._meta.fields]

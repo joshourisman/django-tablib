@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 import tablib
 
@@ -45,8 +48,8 @@ class BaseDataset(tablib.Dataset):
             if callable(attr):
                 attr = self._cleanval(attr(obj), attr)
             else:
-                if hasattr(obj, 'get_%s_display' % attr):
-                    value = getattr(obj, 'get_%s_display' % attr)()
+                if hasattr(obj, 'get_{0}_display'.format(attr)):
+                    value = getattr(obj, 'get_{0}_display'.format(attr))()
                 else:
                     value = getattr(obj, attr)
                 attr = self._cleanval(value, attr)
