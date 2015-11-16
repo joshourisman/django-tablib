@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from collections import OrderedDict
 from copy import deepcopy
 
 from .base import BaseDataset
@@ -14,6 +15,7 @@ class DatasetOptions(object):
         self.model = getattr(options, 'model', None)
         self.queryset = getattr(options, 'queryset', None)
         self.fields = getattr(options, 'fields', [])
+        self.field_order = getattr(options, 'field_order', [])
         self.exclude = getattr(options, 'exclude', [])
 
 
@@ -80,16 +82,26 @@ class ModelDataset(BaseDataset):
         self.fields = {field: Field() for field in included}
         self.fields.update(deepcopy(self.base_fields))
 
-        fields = [
-            field.attribute or name for name, field in self.fields.items()
-        ]
-        header_dict = {
-            field.header or name: field.attribute or name
-            for name, field in self.fields.items()
-        }
-        header_list = header_dict.keys()
+        if self._meta.field_order:
+            # Add ordered fields
+            ordered = OrderedDict([
+                (field, self.fields[field]) for field in self._meta.field_order
+            ])
 
-        self.attr_list = fields
-        self.header_dict = header_dict
-        self.header_list = header_list
+            # Add fields that exist but were not specified in field_order
+            unordered = dict([
+                (field, self.fields[field])
+                for field in self.fields.keys() if field not in ordered
+            ])
+            ordered.update(unordered)
+
+            # Update self.fields to ordered version
+            self.fields = ordered
+
+        self.header_dict = OrderedDict([
+            (field.header or name, field.attribute or name)
+            for name, field in self.fields.items()
+        ])
+        self.header_list = self.header_dict.keys()
+        self.attr_list = [self.header_dict[h] for h in self.header_list]
         super(ModelDataset, self).__init__(*args, **kwargs)
