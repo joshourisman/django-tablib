@@ -2,7 +2,7 @@ import datetime
 import tablib
 
 from django.template.defaultfilters import date
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 
 mimetype_map = {
