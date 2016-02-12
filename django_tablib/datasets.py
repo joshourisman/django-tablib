@@ -14,7 +14,12 @@ class SimpleDataset(BaseDataset):
             v_qs = queryset.values()
             headers = []
             headers.extend(v_qs.query.extra_select)
-            headers.extend(v_qs.field_names)
+            try:
+                field_names = v_qs.query.values_select
+            except AttributeError:
+                # django < 1.9
+                field_names = v_qs.field_names
+            headers.extend(field_names)
             headers.extend(v_qs.query.aggregate_select)
 
             self.header_list = headers
