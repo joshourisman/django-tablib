@@ -33,6 +33,7 @@ class TablibAdmin(admin.ModelAdmin):
     # enable Export to _format_ admin actions by default, this allows to export
     # only selected items.
     enable_admin_actions = True
+    export_encoding = 'utf-8'
 
     def __init__(self, *args, **kwargs):
         for export_format in self.formats:
@@ -76,20 +77,28 @@ class TablibAdmin(admin.ModelAdmin):
         filename = datetime.datetime.now().strftime(self.export_filename)
         return export(request, queryset=queryset, model=self.model,
                       headers=self.headers, file_type=export_format,
-                      filename=filename)
+                      filename=filename, encoding=self.export_encoding)
 
     def get_tablib_queryset(self, request):
         # allow other admin clases to override change list view,
         # taken from django ModelAdmin
         ChangeList = self.get_changelist(request)
+
+        list_display = self.get_list_display(request)
+        list_display_links = self.get_list_display_links(request, list_display)
+        list_filter = self.get_list_filter(request)
+        search_fields = (self.get_search_fields(request)
+                         if hasattr(self, 'get_search_fields')
+                         else self.search_fields)
+
         cl = ChangeList(
             request,
             self.model,
-            self.list_display,
-            self.list_display_links,
-            self.list_filter,
+            list_display,
+            list_display_links,
+            list_filter,
             self.date_hierarchy,
-            self.search_fields,
+            search_fields,
             self.list_select_related,
             self.list_per_page,
             self.list_max_show_all,
