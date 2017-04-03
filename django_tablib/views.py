@@ -31,7 +31,7 @@ def export(request, queryset=None, model=None, headers=None, file_type='xls',
 
     response = HttpResponse(getattr(dataset, file_type), **response_kwargs)
 
-    response['Content-Disposition'] = 'attachment; filename={0}'.format(
+    response['Content-Disposition'] = 'attachment; filename="{0}"'.format(
         filename)
     return response
 
