@@ -173,5 +173,5 @@ That's it!
 Compatibility
 -------------
 
-django-tablib supports Django from 1.6 up to 1.9.
+django-tablib supports Django 1.8 and 1.9. 1.10 support is experimental.
 Older versions might work, but have not been actively tested.
