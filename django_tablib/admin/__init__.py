@@ -5,7 +5,14 @@ import datetime
 import django
 from distutils.version import LooseVersion
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+
+try:
+    # Django <= 1.10
+    from django.core.urlresolvers import reverse
+except ImportError:
+    # Django >= 2.0
+    from django.urls import reverse
+
 from django.http import Http404
 
 
