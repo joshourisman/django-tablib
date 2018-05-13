@@ -1,2 +1,12 @@
-Django==1.6
+Django==1.8
+django-tablib==3.2
+et-xmlfile==1.0.1
+jdcal==1.4
+odfpy==1.3.6
+openpyxl==2.5.3
+PyYAML==3.12
+six==1.11.0
 tablib==0.12.1
+unicodecsv==0.14.1
+xlrd==1.1.0
+xlwt==1.3.0
