@@ -20,7 +20,7 @@ class SimpleDataset(BaseDataset):
                 # django < 1.9
                 field_names = v_qs.field_names
             headers.extend(field_names)
-            headers.extend(v_qs.query.aggregate_select)
+            headers.extend(v_qs.query.annotation_select)
 
             self.header_list = headers
             self.attr_list = headers
