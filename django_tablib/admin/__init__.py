@@ -5,7 +5,7 @@ import datetime
 import django
 from distutils.version import LooseVersion
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404
 
 
@@ -89,6 +89,7 @@ class TablibAdmin(admin.ModelAdmin):
         search_fields = (self.get_search_fields(request)
                          if hasattr(self, 'get_search_fields')
                          else self.search_fields)
+        sortable_by = self.get_sortable_by(request)
 
         cl = ChangeList(
             request,
@@ -103,6 +104,7 @@ class TablibAdmin(admin.ModelAdmin):
             self.list_max_show_all,
             self.list_editable,
             self,
+            sortable_by
         )
         return cl.get_queryset(request)
 
