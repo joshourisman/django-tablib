@@ -1,2 +1,2 @@
-Django==1.6
+Django==2.2.24
 tablib==0.9.11
